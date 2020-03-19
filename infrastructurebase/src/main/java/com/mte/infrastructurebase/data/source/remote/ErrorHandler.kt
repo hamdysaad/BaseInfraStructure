@@ -27,6 +27,8 @@ interface ErrorHandler {
 
         return if (error is SocketTimeoutException) {
             context.getString(R.string.requestTimeOutError)
+        } else if (error is UnknownHostException) {
+            context.getString(R.string.networkError)
         } else if (error is MalformedJsonException) {
             context.getString(R.string.responseMalformedJson)
         } else if (error is UnknownHostException) {
