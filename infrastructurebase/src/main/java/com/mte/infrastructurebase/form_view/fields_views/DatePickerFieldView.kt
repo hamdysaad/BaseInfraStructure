@@ -3,6 +3,7 @@ package com.mte.infrastructurebase.form_view.fields_views
 import android.app.DatePickerDialog
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.widget.DatePicker
 import android.widget.TextView
 import androidx.databinding.InverseBindingListener
@@ -21,21 +22,23 @@ open class DatePickerFieldView(
 ) : TextView(context, attributeSet) , IFieldView<String?>, DatePickerDialog.OnDateSetListener {
 
 
-    private var dateTimestamp: Date?            = null
+    var dateTimestamp: Date?            = null
 
-    private var dateFormat : String             = "yyyy-MM-dd'T'HH:mm:ss.SSS"
-    private var displayDateFormat : String      = "yyyy-MM-dd"
+
+    open var displayDateFormat : String      = "dd-MM-yyyy"
+    open var dateFormat : String             =  displayDateFormat
+//    open var dateFormat : String             = "yyyy-MM-dd'T'HH:mm:ss.SSS"
 
     private var dateText: String?      = null
     private var displayDatText : String? = null
 
-    var initialCurrentDate : Boolean    = false
-    set(value) {
-        field = value
-        if(field)
-            initCurrentDate()
+    open var initialCurrentDate : Boolean    = true
+        set(value) {
+            field = value
+            if(field)
+                initCurrentDate()
 
-    }
+        }
 
 
     private lateinit var myCalender: Calendar
@@ -43,7 +46,17 @@ open class DatePickerFieldView(
 
     private var attrChange: InverseBindingListener? = null
 
-     var rules :  List<IRule<String>>? = null
+    var rules :  List<IRule<String>>? = null
+
+    var viewToClick : View?= null
+        set(value) {
+            field = value
+            field?.setOnClickListener(null)
+            field?.setOnClickListener {
+                openDatePickerDialog()
+            }
+
+        }
 
     val validationMessages: ArrayList<String>? = ArrayList()
 
@@ -54,14 +67,11 @@ open class DatePickerFieldView(
 
     private fun init() {
 
+        viewToClick = this
+
         myCalender = Calendar.getInstance()
 
-        if(initialCurrentDate)
-            initCurrentDate()
 
-        setOnClickListener {
-            openDatePickerDialog()
-        }
     }
 
     private fun initCurrentDate() {
@@ -79,7 +89,7 @@ open class DatePickerFieldView(
         KeyboardUtils.hideKeyboardInDialogFragment(this)
 
         val day = myCalender.get(Calendar.DAY_OF_MONTH)
-       val  month = myCalender.get(Calendar.MONTH)
+        val  month = myCalender.get(Calendar.MONTH)
         val year = myCalender.get(Calendar.YEAR)
 
         datePickerDialog = DatePickerDialog(
@@ -107,21 +117,29 @@ open class DatePickerFieldView(
     }
 
     override fun getValidationMessage(): String? {
-       return validationMessages?.get(0)
+        return validationMessages?.get(0)
     }
 
     override fun setValue(text: String?) {
         try {
+
             //Parse value to date
-            val sdf  = SimpleDateFormat(displayDateFormat, Locale.US)
+            val sdf  = SimpleDateFormat(dateFormat, Locale.US)
             dateTimestamp = sdf.parse(text!!)
             myCalender.time = dateTimestamp!!
 
             dateText = getDateText()
+            displayDatText = getDisplayDateText()
 
-            setText(text)
+            setText(displayDatText)
         } catch (ex : Exception) {
-                ex.printStackTrace()
+            ex.printStackTrace()
+
+            dateText = null
+            displayDatText = null
+
+            setText(displayDatText)
+
         }
 
     }
@@ -136,7 +154,7 @@ open class DatePickerFieldView(
         return null
     }
 
-    private fun getDisplayDateText(): String? {
+    fun getDisplayDateText(): String? {
         if(dateTimestamp != null) {
             //dateFormat
             val sdf = SimpleDateFormat(displayDateFormat, Locale(Locale.getDefault().language))
@@ -147,7 +165,7 @@ open class DatePickerFieldView(
     }
 
     override fun getValue(): String? {
-        return text.toString().trim()
+        return dateText
     }
 
     override fun setAttrChange(attrChange: InverseBindingListener) {
@@ -162,9 +180,8 @@ open class DatePickerFieldView(
 
         dateText = getDateText()
 
-        displayDatText = getDisplayDateText()
+        setValue(dateText)
 
-        setValue(displayDatText)
         attrChange?.onChange()
 
     }
