@@ -40,9 +40,13 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation project(path: ':infrastructurebase')
 
     implementation 'com.android.support:multidex:1.0.3'
+
+    //appcompat
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    //Recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     // Retrofit
     def retrofit = "2.4.0"
@@ -55,13 +59,26 @@ dependencies {
     implementation "com.squareup.moshi:moshi-kotlin:$moshi"
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$retrofit_coroutine_adapter"
 
-    //Koin
-    def koin_version = "2.0.1"
-    implementation "org.koin:koin-android:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 
-    //constraintlayout
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    // OKHttp
+    def okHttpVersion = '3.11.0'
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:$okHttpVersion"
+
+
+    //Glide
+    def versions_glide = "4.9.0"
+    def versions_glide_transformation = "3.3.0"
+    implementation "com.github.bumptech.glide:glide:$versions_glide"
+    implementation "com.github.bumptech.glide:compiler:$versions_glide"
+    implementation "jp.wasabeef:glide-transformations:$versions_glide_transformation"
+    annotationProcessor "com.github.bumptech.glide:compiler:$versions_glide"
+
+    // Coroutine
+    def coroutine = "1.0.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine"
 
     //Circle image view
     implementation 'de.hdodenhof:circleimageview:3.0.1'

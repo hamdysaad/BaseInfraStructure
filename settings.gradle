@@ -1,2 +1,1 @@
-include ':app', ':infrastructurebase'
-rootProject.name='BaseInfraStructure'
+include ':app'
