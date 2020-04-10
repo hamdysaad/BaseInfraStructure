@@ -8,233 +8,28 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
-        <com.mte.infrastructurebase.form_view.FormView
+        <com.mte.infrastructurebase.forms.FormView
             android:id="@+id/form"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical"
-            tools:context=".modules.auth.recover_password.RecoverPasswordFragment">
-
-            <com.mte.infrastructurebase.form_view.FormControlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start">
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start">
-
-                    <com.mte.infrastructurebase.form_view.fields_views.image_attachment.CircleImageAttachFieldView
-                        android:id="@+id/profileImage"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:src="@mipmap/ic_launcher"
-                        app:civ_border_width="1dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </FrameLayout>
-
-            </com.mte.infrastructurebase.form_view.FormControlView>
+            android:orientation="vertical">
 
 
 
-            <!--Image-->
-            <ImageView
-                android:id="@+id/imageIV"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_launcher_background"
-                app:civ_border_color="?attr/colorPrimary"
-                app:civ_border_width="1dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:imageUrl="@{`http://shortage.revival.sa/assets/images/users/no-image.png`}"
-                app:error="@{@drawable/ic_launcher_background}"
-                app:placeholder="@{@drawable/ic_launcher_background}"
-                app:isProgress="@{true}"
-                />
-
-            <!--Organization Name-->
-            <com.mte.infrastructurebase.form_view.FormControlView
+            <com.mte.infrastructurebase.forms.FormControlView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
-                <com.mte.baseinfrastructure.MyLabelView
+                <com.mte.infrastructurebase.forms.fields_views.text_field.TextFieldView
+                    android:id="@+id/nameEt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Label"/>
-
-                <com.mte.infrastructurebase.form_view.fields_views.TextFieldView
-                    android:id="@+id/organizationNameET"
-                    style="@style/editTextStyles"
-                    android:hint="sdfsdf"
-                    android:imeOptions="actionNext"
-                    android:inputType="text"/>
-
-            </com.mte.infrastructurebase.form_view.FormControlView>
-
-            <!--Industry-->
-            <com.mte.infrastructurebase.form_view.FormControlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.mte.infrastructurebase.form_view.fields_views.TextFieldView
-                    android:id="@+id/industryET"
-                    style="@style/editTextStyles"
-                    android:hint="sdfsd"
-                    android:imeOptions="actionNext"
-                    android:inputType="text" />
-
-                <com.mte.infrastructurebase.form_view.ValidationView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/validationErrorStyles"/>
-
-            </com.mte.infrastructurebase.form_view.FormControlView>
+                    android:layout_height="wrap_content"/>
 
 
-            <!--Email-->
-            <com.mte.infrastructurebase.form_view.FormControlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <com.mte.infrastructurebase.form_view.fields_views.TextFieldView
-                    android:id="@+id/emailET"
-                    style="@style/editTextStyles"
-                    android:hint="emailHint"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    />
 
-                <com.mte.infrastructurebase.form_view.ValidationView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/validationErrorStyles"/>
-
-            </com.mte.infrastructurebase.form_view.FormControlView>
-
-
-            <!--Mobile-->
-            <com.mte.infrastructurebase.form_view.FormControlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-               >
-                <com.mte.infrastructurebase.form_view.fields_views.TextFieldView
-                    android:id="@+id/mobileET"
-                    style="@style/editTextStyles"
-                    android:hint="mobileHint"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress" />
-
-                <com.mte.infrastructurebase.form_view.ValidationView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/validationErrorStyles"/>
-
-            </com.mte.infrastructurebase.form_view.FormControlView>
-
-            <!--Password-->
-            <com.mte.infrastructurebase.form_view.FormControlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.mte.infrastructurebase.form_view.fields_views.TextFieldView
-                    android:id="@+id/passwordET"
-                    style="@style/editTextStyles"
-                    android:hint="passwordHint"
-                    android:imeOptions="actionDone"
-                    android:inputType="textPassword"
-                  />
-
-                <com.mte.infrastructurebase.form_view.ValidationView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/validationErrorStyles"/>
-
-            </com.mte.infrastructurebase.form_view.FormControlView>
-
-
-            <!--Check-->
-            <com.mte.infrastructurebase.form_view.FormControlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.mte.infrastructurebase.form_view.fields_views.CheckBoxFieldView
-                    android:id="@+id/checkboxField"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="userManagementText"/>
-
-                <com.mte.infrastructurebase.form_view.ValidationView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/validationErrorStyles"/>
-
-            </com.mte.infrastructurebase.form_view.FormControlView>
-
-
-            <!--Segmented-->
-            <com.mte.infrastructurebase.form_view.FormControlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.mte.infrastructurebase.form_view.fields_views.radio_group.RadioGroupFieldView
-                    android:id="@+id/segmentedBtn"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="userManagementText">
-
-
-                    <RadioButton
-                        android:id="@+id/maleRB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="male"/>
-
-                    <RadioButton
-                        android:id="@+id/femaleRB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="female"/>
-
-                </com.mte.infrastructurebase.form_view.fields_views.radio_group.RadioGroupFieldView>
-
-                <com.mte.infrastructurebase.form_view.ValidationView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/validationErrorStyles"/>
-
-            </com.mte.infrastructurebase.form_view.FormControlView>
-
-
-            <!--File Attach-->
-            <com.mte.infrastructurebase.form_view.FormControlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <com.mte.infrastructurebase.form_view.fields_views.image_attachment.FileAttachFieldView
-                    android:id="@+id/fileAttach"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.mte.infrastructurebase.form_view.ValidationView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/validationErrorStyles"/>
-
-            </com.mte.infrastructurebase.form_view.FormControlView>
+            </com.mte.infrastructurebase.forms.FormControlView>
 
 
             <Button
@@ -243,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="submt"/>
 
-        </com.mte.infrastructurebase.form_view.FormView>
+        </com.mte.infrastructurebase.forms.FormView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

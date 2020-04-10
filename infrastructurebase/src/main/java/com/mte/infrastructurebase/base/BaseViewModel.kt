@@ -7,7 +7,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import org.koin.core.KoinComponent
 
-open class BaseViewModel : ViewModel() , KoinComponent{
+open class BaseViewModel : ViewModel(){
 
     var activity: Activity? = null
     var context: Context? = null

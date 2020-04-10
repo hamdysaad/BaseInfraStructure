@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -15,11 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mte.infrastructurebase.R
 import com.mte.infrastructurebase.base.BaseDialog
 import com.mte.infrastructurebase.defaults.*
 import com.mte.infrastructurebase.utils.KeyboardUtils
-import com.mte.infrastructurebase.utils.LocaleHelperJava
+import com.mte.infrastructurebase.utils.LocaleHelper
 
 abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
@@ -36,10 +36,14 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     @get:LayoutRes
     protected abstract val layoutRes: Int
 
+    @get:StringRes
+    protected open val yesString: Int? = null
+    protected open val noString:  Int? = null
+
     protected abstract fun initUI(savedInstanceState: Bundle?)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        LocaleHelperJava.onAttach(this)
+        LocaleHelper.onAttach(this)
         super.onCreate(savedInstanceState)
         init()
         performDataBinding()
@@ -48,7 +52,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     open fun init() {
         dialogLoading   = DefaultDialogLoading(this)
-        dialogAlert     = DefaultDialogAlert(this , getString(R.string.ok),getString(R.string.cancel))
+        dialogAlert     = DefaultDialogAlert(this , yesString?.let { getString(it) } ?: "Yes", noString?.let { getString(it) } ?: "No")
         wrapLoading     = DefaultWrapLoading(this)
         wrapError       = DefaultWrapError(this)
         wrapEmptyData   = DefaultWrapEmptyData(this)
@@ -61,7 +65,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(LocaleHelperJava.onAttach(newBase))
+        super.attachBaseContext(LocaleHelper.onAttach(newBase))
     }
 
 

@@ -6,8 +6,8 @@ import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
-import com.mte.infrastructurebase.form_view.interfaces.IFieldView
-import com.mte.infrastructurebase.forms.fields.attachments.AttachItemModel
+import com.mte.infrastructurebase.forms.interfaces.IFieldView
+import com.mte.infrastructurebase.forms.fields_views.attachments.models.AttachmentModel
 
 object FormBinding {
 
@@ -95,21 +95,21 @@ object FormBinding {
     @SuppressLint("LogNotTimber")
     @JvmStatic
     @BindingAdapter( "attachBinding")
-    fun setBindingAttach(fieldView: View, attachItemModel: AttachItemModel?) {
+    fun setBindingAttach(fieldView: View, attachItemModel: AttachmentModel?) {
         Log.e(TAG , "attachBinding $attachItemModel")
 
         if(fieldView is IFieldView<*>)
-            (fieldView as IFieldView<AttachItemModel?>).setValue(attachItemModel)
+            (fieldView as IFieldView<AttachmentModel?>).setValue(attachItemModel)
     }
 
     @SuppressLint("LogNotTimber")
     @JvmStatic
     @InverseBindingAdapter(attribute = "attachBinding")
-    fun getBindingAttach(fieldView: View) : AttachItemModel? {
+    fun getBindingAttach(fieldView: View) : AttachmentModel? {
 
         if(fieldView is IFieldView<*>){
             Log.e(TAG , "BindinAttach ${fieldView.getValue()}")
-            return  (fieldView as IFieldView<AttachItemModel?>).getValue()
+            return  (fieldView as IFieldView<AttachmentModel?>).getValue()
         }
         return null
     }

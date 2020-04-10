@@ -13,7 +13,7 @@ open class BasePreferenceStorage(val context: Context?) {
 
     protected var pref: SharedPreferences?
 
-    val PREF = "pref"
+    open val PREF = "pref"
 
     init {
        pref =  context?.getSharedPreferences(PREF, MODE_PRIVATE)

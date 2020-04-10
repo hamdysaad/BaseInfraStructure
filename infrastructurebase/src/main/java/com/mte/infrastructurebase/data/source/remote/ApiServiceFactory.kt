@@ -23,14 +23,25 @@ abstract class ApiServiceFactory {
             errorHandler = apiConfig.getErrorHandler()
 
             return synchronized(this) {
-                val instance = Retrofit.Builder()
-                    .baseUrl(apiConfig.getHost())
-                    .client(provideOkHttpClient(apiConfig))
-//                    .addConverterFactory(MoshiConverterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(LiveDataCallAdapterFactory())
-                    .build()
+
+                val retrofitBuilder = Retrofit.Builder()
+
+
+                retrofitBuilder.baseUrl(apiConfig.getHost())
+                retrofitBuilder.client(provideOkHttpClient(apiConfig))
+
+
+                retrofitBuilder.addConverterFactory(GsonConverterFactory.create())
+                retrofitBuilder.addCallAdapterFactory(LiveDataCallAdapterFactory())
+
+                apiConfig.addRetrofitConfig(retrofitBuilder)
+
+
+                val instance = retrofitBuilder.build()
                     .create(apiConfig.getApiService<T>())
+
+
+
                 instance
             }
         }
@@ -38,14 +49,14 @@ abstract class ApiServiceFactory {
         private fun provideOkHttpClient(apiConfig : APIConfig? = null): OkHttpClient {
 
             val client = OkHttpClient.Builder()
-            client.addInterceptor(initializeHeaders(apiConfig))//Todo()
+            client.addInterceptor(initializeHeaders(apiConfig))
             client.readTimeout(60, TimeUnit.SECONDS);
             client.connectTimeout(60, TimeUnit.SECONDS);
-//            if(BuildConfig.DEBUG) {
-                val interceptor = HttpLoggingInterceptor()
-                interceptor.level = HttpLoggingInterceptor.Level.BODY
-                client.addInterceptor(interceptor)//Add Loggong Intercepter
-//            }
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            client.addInterceptor(interceptor)
+
+            apiConfig?.addOKHttpConfig(client)
 
             return client.build()
         }
@@ -53,16 +64,6 @@ abstract class ApiServiceFactory {
 
 
         private fun initializeHeaders(apiConfig : APIConfig? = null): Interceptor {
-
-//            val headers = HashMap<String, String>()
-////            token?.let {
-////                headers.put("Authorization", "Bearer ${it}")
-////            }
-////            headers.put("Accept", "application/json")
-//            headers.put("Content-Type", "application/json")
-////            headers.put("Content-Type", "application/x-www-form-urlencoded")
-//            headers.put("X-Requested-With", "XMLHttpRequest")
-//            headers.put("Authorization", "Bearer $token")
 
             return Interceptor { chain ->
                 val original = chain.request()

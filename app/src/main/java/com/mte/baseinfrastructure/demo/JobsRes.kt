@@ -13,4 +13,8 @@ class JobsRes : DemoResponseModel(){
     override fun getError(): String? {
         return null
     }
+
+    override fun isEmpty(): Boolean? {
+        return true
+    }
 }

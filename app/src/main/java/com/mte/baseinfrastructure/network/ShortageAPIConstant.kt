@@ -2,6 +2,8 @@ package com.mte.baseinfrastructure.network
 
 import com.mte.infrastructurebase.data.source.remote.APIConfig
 import com.mte.infrastructurebase.data.source.remote.ErrorHandler
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
 import java.util.HashMap
 
 /**
@@ -34,6 +36,14 @@ class ShortageAPIConstant : APIConfig() {
 
     override fun getErrorHandler(): ErrorHandler? {
         return null
+    }
+
+    override fun addOKHttpConfig(client: OkHttpClient.Builder) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addRetrofitConfig(retrofitBuilder: Retrofit.Builder) {
+        TODO("Not yet implemented")
     }
 
     override fun getHost(): String {

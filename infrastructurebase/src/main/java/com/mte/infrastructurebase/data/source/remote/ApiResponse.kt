@@ -1,31 +1,17 @@
 package com.mte.infrastructurebase.data.source.remote
 
 
-import android.annotation.SuppressLint
-import android.util.Log
-import com.google.gson.Gson
-import com.google.gson.stream.MalformedJsonException
-import com.mte.infrastructurebase.App
-import com.mte.infrastructurebase.R
-import retrofit2.HttpException
 import retrofit2.Response
-import java.io.IOException
-import java.net.ConnectException
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import java.util.regex.Pattern
 import kotlin.String as String1
 
- sealed class ApiResponse<T> {
+sealed class ApiResponse<T> {
 
     companion object {
 
-        private val TAG: kotlin.String = "ApiResponse"
 
-        @SuppressLint("LogNotTimber")
         fun <T> create(error: Throwable): ApiErrorResponse<T> {
-            Log.e("ApiResponse", error.message)
-            return ApiErrorResponse(ApiServiceFactory.errorHandler?.getHttpExceptionError(error)?: getCustomErrorMessage(error))
+            return ApiErrorResponse(ApiServiceFactory.errorHandler?.getHttpExceptionError(error))
         }
 
         fun <T> create(response: Response<T>): ApiResponse<T> {
@@ -34,9 +20,10 @@ import kotlin.String as String1
 
                 val body = response.body()
 
-                if (body is BaseResponseModel && body.getSuccess() == null) {
-                    ApiErrorResponse(body.getError() ?: getCustomErrorMessage(Throwable(body.getError())))
-                } else if (body == null || response.code() == 204) {
+                if (body is BaseResponseModel && body.getError() != null) {
+                    ApiErrorResponse(body.getError())
+
+                } else if (body == null || (body is BaseResponseModel && body.isEmpty() == true)) {
                     ApiEmptyResponse()
                 } else {
                     ApiSuccessResponse(
@@ -51,35 +38,9 @@ import kotlin.String as String1
 
                 val errorFromBody = ApiServiceFactory.errorHandler?.getErrorFromBody(errorBody)
 
-                val errorMsg = if(errorBody == null) response.message() else errorFromBody
+                val errorMsg = if (errorBody == null) response.message() else errorFromBody
 
-                ApiErrorResponse(errorMsg ?: getCustomErrorMessage(Throwable(errorMsg)))
-            }
-        }
-
-        @SuppressLint("LogNotTimber")
-        fun getCustomErrorMessage(error: Throwable): kotlin.String {
-
-            Log.e("ApiResponse" , error.message)
-
-            val context = App.appInstance.applicationContext
-
-            return if (error is SocketTimeoutException) {
-                context.getString(R.string.requestTimeOutError)
-            } else if (error is UnknownHostException) {
-                context.getString(R.string.networkError)
-            } else if (error is MalformedJsonException) {
-                context.getString(R.string.responseMalformedJson)
-            } else if (error is UnknownHostException) {
-                context.getString(R.string.unknownError)
-            } else if (error is ConnectException) {
-                context.getString(R.string.networkError)
-            } else if (error is IOException) {
-                context.getString(R.string.networkError)
-            } else if (error is HttpException) {
-                context.getString(R.string.unknownError)
-            } else {
-                context.getString(R.string.unknownError)
+                ApiErrorResponse(errorMsg)
             }
         }
     }
@@ -92,7 +53,7 @@ class ApiEmptyResponse<T> : ApiResponse<T>()
 
 data class ApiSuccessResponse<T>(
     val body: T,
-    val links: Map<String1, String1>
+    val links: Map<kotlin.String?, kotlin.String?>
 ) : ApiResponse<T>() {
     constructor(body: T, linkHeader: String1?) : this(
         body = body,
@@ -119,8 +80,8 @@ data class ApiSuccessResponse<T>(
         private val PAGE_PATTERN = Pattern.compile("\\bpage=(\\d+)")
         private const val NEXT_LINK = "next"
 
-        private fun String1.extractLinks(): Map<String1, String1> {
-            val links = mutableMapOf<String1, String1>()
+        private fun String1.extractLinks(): Map<kotlin.String?, kotlin.String?> {
+            val links = mutableMapOf<kotlin.String?, kotlin.String?>()
             val matcher = LINK_PATTERN.matcher(this)
 
             while (matcher.find()) {
@@ -135,4 +96,4 @@ data class ApiSuccessResponse<T>(
     }
 }
 
-data class ApiErrorResponse<T >(val errorMessage: String1) : ApiResponse<T>()
+data class ApiErrorResponse<T>(val errorMessage: kotlin.String?) : ApiResponse<T>()

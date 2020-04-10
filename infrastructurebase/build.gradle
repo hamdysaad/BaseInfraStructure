@@ -110,12 +110,6 @@ dependencies {
     //swiperefreshlayout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
-    
-    implementation 'com.google.android.gms:play-services-location:17.0.0'
-    implementation 'com.google.android.gms:play-services-gcm:17.0.0'
-
-
-
     //multidex
     implementation 'androidx.multidex:multidex:2.0.1'
 

@@ -20,14 +20,21 @@ import com.mte.infrastructurebase.databinding.DefaultErrorLayoutBinding
 abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context?, var resource: Resource<ArrayList<T>?>? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
-    open val emptyDataText: String? = context?.getString(R.string.notDataFound)
-    open val retryAgainText: String? = context?.getString(R.string.retryText)
-    open val errorMessage : String? = context?.getString(R.string.unknownError)
+    open val emptyDataText: String? = "No Data Found"
+    open val retryAgainText: String? = "Retry"
+    open val errorMessage : String? = "an error has occurred"
+
+    @get:LayoutRes
+    open val loadingLayout : Int = R.layout.layout_loading_dialog_default
+
+    @get:LayoutRes
+    open val emptylayout : Int = R.layout.default_empty_data_layout
+
+    @get:LayoutRes
+    open val errorLayout : Int =R.layout.default_error_layout
 
     @get:LayoutRes
     abstract val  itemLayoutRes : Int
-
-//    protected abstract fun createDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
 
    open fun createDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return DataItemVH(LayoutInflater.from(parent.context).inflate(itemLayoutRes, parent, false))
@@ -38,15 +45,15 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
     protected abstract fun onRetry()
 
     open fun createLoadingViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return LoadingItem(LayoutInflater.from(parent.context).inflate(R.layout.layout_loading_dialog_default, parent, false))
+        return LoadingItem(LayoutInflater.from(parent.context).inflate(loadingLayout, parent, false))
     }
 
     open fun createErrorViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return ErrorItem(LayoutInflater.from(parent.context).inflate(R.layout.default_error_layout, parent, false))
+        return ErrorItem(LayoutInflater.from(parent.context).inflate(errorLayout, parent, false))
     }
 
     open fun createEmptyViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        return EmptyItem(LayoutInflater.from(parent.context).inflate(R.layout.default_empty_data_layout, parent, false))
+        return EmptyItem(LayoutInflater.from(parent.context).inflate(emptylayout, parent, false))
     }
 
 
@@ -73,9 +80,9 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         when(holder){
-            is BaseRVAdapter<* , *>.ErrorItem -> {(holder as BaseRVAdapter<* ,*>.ErrorItem).bind(resource)}
+            is BaseRVAdapter<* , *>.ErrorItem -> { holder.bind(resource)}
             is BaseRVAdapter<* , *>.LoadingItem -> {}
-            is BaseRVAdapter<* , *>.EmptyItem -> {(holder as BaseRVAdapter<* ,*>.EmptyItem).bind(resource)}
+            is BaseRVAdapter<* , *>.EmptyItem -> { holder.bind(resource)}
             else ->bindDataViewHolder(DataBindingUtil.bind<BINDING>(holder .itemView), getItem(position), position)
         }
     }
@@ -122,7 +129,7 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
         const val TYPE_EMPTY = 3
     }
 
-    inner class LoadingItem(itemView: View) : RecyclerView.ViewHolder(itemView){}
+    inner class LoadingItem(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     inner class ErrorItem(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -144,13 +151,6 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
         fun bind(resource: Resource<*>?) {
             val binding = DataBindingUtil.bind<DefaultEmptyDataLayoutBinding>(itemView)
             binding?.text = emptyDataText
-//            binding?.tryAgainText = retryAgainText
-     /*       binding?.iTryClick = object : OnRetryClick{
-                override fun onRetry() {
-                    this@BaseRVAdapter.onRetry()
-                }
-            }*/
-
         }
     }
 
