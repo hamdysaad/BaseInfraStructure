@@ -47,8 +47,6 @@ class FormControlView(
             if(child is IFieldView<*>)
                 fieldView = child
 
-
-            fieldView?.setFormControl(this)
         }
     }
 

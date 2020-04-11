@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.*
 import androidx.databinding.InverseBindingListener
+import com.mte.infrastructurebase.forms.FormField
 import com.mte.infrastructurebase.forms.interfaces.IFieldView
 import com.mte.infrastructurebase.forms.interfaces.IFormControl
 import com.mte.infrastructurebase.forms.interfaces.IRule
@@ -16,9 +17,10 @@ open class RadioGroupFieldView(
 ) : RadioGroup(context, attributeSet) , IFieldView<String?> {
 
 
-    var checkOptions: List<CheckOptions>? = null
+    var formField: FormField<String> = FormField(this)
 
-    var onChangeListener: OnChangeListener? = null
+
+    var checkOptions: List<CheckOptions>? = null
 
     private var attrChange: InverseBindingListener? = null
 
@@ -38,27 +40,18 @@ open class RadioGroupFieldView(
         setOnCheckedChangeListener(object : OnCheckedChangeListener{
             override fun onCheckedChanged(p0: RadioGroup?, p1: Int) {
                 onCheckChangeListener?.onCheckedChanged(p0 , p1)
-                attrChange?.onChange()
+                formField.attrChangeListener?.onChange()
             }
         })
 
     }
 
     override fun isValid(): Boolean {
-
-        validationMessages?.clear()
-
-        rules?.forEach {
-            val message = it.validate(getValue())
-            if (message != null)
-                validationMessages?.add(message)
-        }
-
-        return validationMessages?.size == 0
+        return formField.isValid()
     }
 
     override fun getValidationMessage(): String? {
-       return validationMessages?.get(0)
+       return formField.getValidationMessage()
     }
 
     override fun setValue(text: String?) {
@@ -74,7 +67,7 @@ open class RadioGroupFieldView(
     }
 
     override fun setAttrChange(attrChange: InverseBindingListener) {
-        this.attrChange = attrChange
+        formField.attrChangeListener
     }
 
 
@@ -99,8 +92,6 @@ open class RadioGroupFieldView(
 
         return id
     }
-
-    override fun setFormControl(formControl: IFormControl?) {}
 
 
 }

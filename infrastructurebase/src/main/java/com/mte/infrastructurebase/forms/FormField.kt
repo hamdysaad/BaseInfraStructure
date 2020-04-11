@@ -37,8 +37,6 @@ open class FormField<T>(val iFieldValue : IFieldView<T?>) : IFieldView<T> {
         this.attrChangeListener = attrChange
     }
 
-    override fun setFormControl(formControl: IFormControl?) {}
-
 
     override fun setValue(value: T?) {
         iFieldValue.setValue(value)

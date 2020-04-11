@@ -7,36 +7,35 @@ import android.view.View
 import android.widget.DatePicker
 import android.widget.TextView
 import androidx.databinding.InverseBindingListener
+import com.mte.infrastructurebase.forms.FormField
 import com.mte.infrastructurebase.forms.interfaces.IFieldView
-import com.mte.infrastructurebase.forms.interfaces.IFormControl
 import com.mte.infrastructurebase.forms.interfaces.IRule
 import com.mte.infrastructurebase.utils.KeyboardUtils
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
-open class DatePickerFieldView(
-    context: Context,
-    attributeSet: AttributeSet? = null
-) : TextView(context, attributeSet) ,
-    IFieldView<String?>, DatePickerDialog.OnDateSetListener {
+open class DatePickerFieldView(context: Context, attributeSet: AttributeSet? = null) :
+    TextView(context, attributeSet), IFieldView<String?>, DatePickerDialog.OnDateSetListener {
 
 
-    var dateTimestamp: Date?            = null
+    var formField: FormField<String> = FormField(this)
+
+    var currentDate: Date? = null
+    var dateTimestamp: Date? = null
 
 
-    open var displayDateFormat : String      = "dd-MM-yyyy"
-    open var dateFormat : String             =  displayDateFormat
+    open var displayDateFormat: String = "dd-MM-yyyy"
+    open var dateFormat: String = displayDateFormat
 //    open var dateFormat : String             = "yyyy-MM-dd'T'HH:mm:ss.SSS"
 
-    private var dateText: String?      = null
-    private var displayDatText : String? = null
+    private var dateText: String? = null
+    private var displayDatText: String? = null
 
-    open var initialCurrentDate : Boolean    = true
+    open var initialCurrentDate: Boolean = true
         set(value) {
             field = value
-            if(field)
+            if (field)
                 initCurrentDate()
 
         }
@@ -45,11 +44,14 @@ open class DatePickerFieldView(
     private lateinit var myCalender: Calendar
     private lateinit var datePickerDialog: DatePickerDialog
 
-    private var attrChange: InverseBindingListener? = null
 
-    var rules :  List<IRule<String>>? = null
+    var rules: List<IRule<String>>? = null
+        set(value) {
+            formField.rules = value
+            field = value
+        }
 
-    var viewToClick : View?= null
+    var viewToClick: View? = null
         set(value) {
             field = value
             field?.setOnClickListener(null)
@@ -58,8 +60,6 @@ open class DatePickerFieldView(
             }
 
         }
-
-    val validationMessages: ArrayList<String>? = ArrayList()
 
     init {
 
@@ -72,15 +72,20 @@ open class DatePickerFieldView(
 
         myCalender = Calendar.getInstance()
 
+        Calendar.getInstance().let {
+            val sdf = SimpleDateFormat(dateFormat, Locale.US)
+            currentDate = sdf.parse(getDateText(it.time) ?: "")
+        }
+
 
     }
 
     private fun initCurrentDate() {
         myCalender = Calendar.getInstance()
         val day = myCalender.get(Calendar.DAY_OF_MONTH)
-        val  month = myCalender.get(Calendar.MONTH)
+        val month = myCalender.get(Calendar.MONTH)
         val year = myCalender.get(Calendar.YEAR)
-        onDateSet(null , year , month , day)
+        onDateSet(null, year, month, day)
     }
 
     private fun openDatePickerDialog() {
@@ -90,7 +95,7 @@ open class DatePickerFieldView(
         KeyboardUtils.hideKeyboardInDialogFragment(this)
 
         val day = myCalender.get(Calendar.DAY_OF_MONTH)
-        val  month = myCalender.get(Calendar.MONTH)
+        val month = myCalender.get(Calendar.MONTH)
         val year = myCalender.get(Calendar.YEAR)
 
         datePickerDialog = DatePickerDialog(
@@ -105,27 +110,18 @@ open class DatePickerFieldView(
     }
 
     override fun isValid(): Boolean {
-
-        validationMessages?.clear()
-
-        rules?.forEach {
-            val message = it.validate(getValue())
-            if (message != null)
-                validationMessages?.add(message)
-        }
-
-        return validationMessages?.size == 0
+        return formField.isValid()
     }
 
     override fun getValidationMessage(): String? {
-        return validationMessages?.get(0)
+        return return formField.getValidationMessage()
     }
 
     override fun setValue(text: String?) {
         try {
 
             //Parse value to date
-            val sdf  = SimpleDateFormat(dateFormat, Locale.US)
+            val sdf = SimpleDateFormat(dateFormat, Locale.US)
             dateTimestamp = sdf.parse(text!!)
             myCalender.time = dateTimestamp!!
 
@@ -133,7 +129,7 @@ open class DatePickerFieldView(
             displayDatText = getDisplayDateText()
 
             setText(displayDatText)
-        } catch (ex : Exception) {
+        } catch (ex: Exception) {
             ex.printStackTrace()
 
             dateText = null
@@ -146,20 +142,24 @@ open class DatePickerFieldView(
     }
 
     private fun getDateText(): String? {
-        if(dateTimestamp != null) {
+        return getDateText(dateTimestamp)
+    }
+
+    private fun getDateText(date: Date?): String? {
+        if (date != null) {
             //dateFormat
             var sdf = SimpleDateFormat(dateFormat, Locale.US)
-            return  sdf.format(dateTimestamp!!)
+            return sdf.format(date!!)
         }
 
         return null
     }
 
     fun getDisplayDateText(): String? {
-        if(dateTimestamp != null) {
+        if (dateTimestamp != null) {
             //dateFormat
             val sdf = SimpleDateFormat(displayDateFormat, Locale(Locale.getDefault().language))
-            return  sdf.format(dateTimestamp!!)
+            return sdf.format(dateTimestamp!!)
         }
 
         return null
@@ -170,22 +170,22 @@ open class DatePickerFieldView(
     }
 
     override fun setAttrChange(attrChange: InverseBindingListener) {
-        this.attrChange = attrChange
+        formField.setAttrChange(attrChange)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
 
         myCalender.set(year, month, dayOfMonth)
 
-        dateTimestamp =  myCalender.time
+        dateTimestamp = myCalender.time
 
         dateText = getDateText()
 
         setValue(dateText)
 
-        attrChange?.onChange()
+        formField.attrChangeListener?.onChange()
 
     }
 
-    override fun setFormControl(formControl: IFormControl?) {}
+
 }

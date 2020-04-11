@@ -67,8 +67,6 @@ class FieldValidation<T>(var value : T? ,
 
         override fun setAttrChange(attrChange: InverseBindingListener) {}
 
-        override fun setFormControl(formControl: IFormControl?) { }
-
     }
 
 

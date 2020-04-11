@@ -8,5 +8,4 @@ interface IFieldView<T> {
     fun setValue(value: T?)
     fun getValue(): T?
     fun setAttrChange(attrChange: InverseBindingListener)
-    fun setFormControl(formControl: IFormControl?)
 }

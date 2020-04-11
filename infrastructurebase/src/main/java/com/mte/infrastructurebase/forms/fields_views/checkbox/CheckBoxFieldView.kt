@@ -66,7 +66,5 @@ open class CheckBoxFieldView(
         formField.setAttrChange(attrChange)
     }
 
-    override fun setFormControl(formControl: IFormControl?) {}
-
 
 }

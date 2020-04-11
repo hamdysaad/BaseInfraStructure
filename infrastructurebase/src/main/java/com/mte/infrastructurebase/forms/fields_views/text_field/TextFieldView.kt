@@ -46,7 +46,5 @@ open class TextFieldView(
         formField.setAttrChange(attrChange)
     }
 
-    override fun setFormControl(formControl: IFormControl?) {}
-
 
 }
