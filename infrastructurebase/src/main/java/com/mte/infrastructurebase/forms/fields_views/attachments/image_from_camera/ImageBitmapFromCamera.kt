@@ -5,7 +5,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.graphics.Bitmap
 import android.provider.MediaStore
-import com.mte.infrastructurebase.attachments.OnTakeBitmapPhotoListener
 import com.mte.infrastructurebase.forms.fields_views.attachments.BaseAttachment
 
 

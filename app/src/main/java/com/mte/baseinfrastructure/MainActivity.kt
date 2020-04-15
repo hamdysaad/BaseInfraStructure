@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.mte.baseinfrastructure.databinding.ActivityMainBinding
 import com.mte.baseinfrastructure.demo.DemoViewModel
+import com.mte.baseinfrastructure.demo.JobModel
 import com.mte.infrastructurebase.base.base_activity.BaseActivity
 import com.mte.infrastructurebase.forms.interfaces.IFormControl
 import com.mte.infrastructurebase.forms.interfaces.ValidationFieldViewHandler
@@ -14,10 +15,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     val viewmodel : DemoViewModel by viewModel()
 
+    val model = JobModel()
+
     override val layoutRes: Int
         get() = R.layout.activity_main
 
     override fun initUI(savedInstanceState: Bundle?) {
+
+        binding.model = model
         initForm()
     }
 
@@ -27,7 +32,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
 
 
-        binding.nameEt.rules = listOf(Required("adsfasdf"))
+        binding.imageAttachment.let {
+            it.activity = this
+        }
 
 
 
@@ -62,11 +69,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        binding.imageAttachment.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        binding.imageAttachment.onActivityResult(requestCode, resultCode, data)
+
     }
+
 }

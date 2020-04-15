@@ -2,10 +2,9 @@ package com.mte.infrastructurebase.forms
 
 import androidx.databinding.InverseBindingListener
 import com.mte.infrastructurebase.forms.interfaces.IFieldView
-import com.mte.infrastructurebase.forms.interfaces.IFormControl
 import com.mte.infrastructurebase.forms.interfaces.IRule
 
-open class FormField<T>(val iFieldValue : IFieldView<T?>) : IFieldView<T> {
+open class FormField<T>(val iFieldView : IFieldView<T?>) : IFieldView<T> {
 
 
      var attrChangeListener : InverseBindingListener? = null
@@ -39,11 +38,11 @@ open class FormField<T>(val iFieldValue : IFieldView<T?>) : IFieldView<T> {
 
 
     override fun setValue(value: T?) {
-        iFieldValue.setValue(value)
+        iFieldView.setValue(value)
     }
 
     override fun getValue(): T? {
-        return iFieldValue.getValue()
+        return iFieldView.getValue()
     }
 
 }

@@ -2,7 +2,6 @@ package com.mte.infrastructurebase.forms.fields_views.attachments
 
 import android.app.Activity
 import android.content.Intent
-import com.mte.infrastructurebase.attachments.OnAttachmentSelectedListener
 
 
 class DocAttachment(activity: Activity,

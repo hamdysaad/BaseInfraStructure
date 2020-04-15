@@ -1,5 +1,7 @@
 package com.mte.baseinfrastructure.demo
 
+import com.mte.infrastructurebase.forms.fields_views.attachments.models.AttachmentModel
+
 open class JobModel {
 
     /* {
@@ -39,6 +41,8 @@ open class JobModel {
     var updated_at : String? = null
     var deleted_at : String? = null
     var numberOfNeededEmployee : String? = null
+
+    var imageAttachment : AttachmentModel? = null
 
 
 

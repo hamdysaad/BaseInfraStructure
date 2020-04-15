@@ -1,4 +1,4 @@
-package com.mte.infrastructurebase.attachments
+package com.mte.infrastructurebase.forms.fields_views.attachments
 
 import com.mte.infrastructurebase.forms.fields_views.attachments.models.AttachmentModel
 

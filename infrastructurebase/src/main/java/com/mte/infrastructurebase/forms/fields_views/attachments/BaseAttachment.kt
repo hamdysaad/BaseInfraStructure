@@ -10,7 +10,6 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.checkSelfPermission
-import com.mte.infrastructurebase.attachments.OnAttachmentSelectedListener
 import com.mte.infrastructurebase.forms.fields_views.attachments.models.AttachmentModel
 import timber.log.Timber
 import java.io.File
