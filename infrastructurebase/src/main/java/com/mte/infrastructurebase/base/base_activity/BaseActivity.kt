@@ -249,7 +249,10 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        onActivityResultHandler(requestCode, resultCode, data)
+    }
 
+    open fun onActivityResultHandler(requestCode: Int, resultCode: Int, data: Intent?) {
         supportFragmentManager.fragments.forEach {
             it.onActivityResult(requestCode, resultCode, data)
         }
@@ -307,6 +310,18 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        onRequestPermissionsResultHandler(requestCode , permissions , grantResults)
+
+
+    }
+
+    fun onRequestPermissionsResultHandler(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+
         supportFragmentManager.fragments.forEach {
             it.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
