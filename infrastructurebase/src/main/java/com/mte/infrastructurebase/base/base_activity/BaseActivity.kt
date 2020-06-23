@@ -316,7 +316,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     }
 
-    fun onRequestPermissionsResultHandler(
+    open fun onRequestPermissionsResultHandler(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
