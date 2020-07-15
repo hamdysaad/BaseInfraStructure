@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -36,6 +37,17 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     @get:LayoutRes
     protected abstract val layoutRes: Int
 
+
+    @get:StringRes
+    protected abstract val okRes: Int
+
+    @get:StringRes
+    protected abstract val yesRes: Int
+
+
+    @get:StringRes
+    protected abstract val noRes: Int
+
     protected abstract fun initUI(savedInstanceState: Bundle?)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +60,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     open fun init() {
         dialogLoading   = DefaultDialogLoading(this)
-        dialogAlert     = DefaultDialogAlert(this , getString(R.string.ok),getString(R.string.cancel))
+        dialogAlert     = DefaultDialogAlert(this , getString(okRes) , getString(yesRes) ,getString(noRes))
         wrapLoading     = DefaultWrapLoading(this)
         wrapError       = DefaultWrapError(this)
         wrapEmptyData   = DefaultWrapEmptyData(this)

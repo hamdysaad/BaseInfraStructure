@@ -6,8 +6,7 @@ import androidx.appcompat.app.AlertDialog
 import com.mte.infrastructurebase.base.base_activity.ConfirmHandler
 import com.mte.infrastructurebase.base.base_activity.IDialogAlert
 
-class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtnText: String) :
-    IDialogAlert {
+class DefaultDialogAlert(val context: Context, val okBtnText: String ,val yesBtnText: String, val noBtnText: String) : IDialogAlert {
 
 
     private var builder: AlertDialog.Builder? = null
@@ -42,9 +41,9 @@ class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtn
         builder?.setMessage(msg)
 
         //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
+        builder?.setPositiveButton(okBtnText) { dialog, which ->
             dialog.dismiss()
-        })
+        }
 
         messageDialog = builder?.create()
 
@@ -60,9 +59,9 @@ class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtn
         builder?.setMessage(msg)
 
         //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
+        builder?.setPositiveButton(okBtnText) { dialog, which ->
             dialog.dismiss()
-        })
+        }
 
         messageDialog = builder?.create()
 
@@ -77,9 +76,9 @@ class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtn
         builder?.setMessage(msg)
 
         //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
+        builder?.setPositiveButton(okBtnText) { dialog, which ->
             dialog.dismiss()
-        })
+        }
 
         messageDialog = builder?.create()
 
@@ -94,9 +93,9 @@ class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtn
         builder?.setMessage(msg)
 
         //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
+        builder?.setPositiveButton(okBtnText) { dialog, which ->
             dialog.dismiss()
-        })
+        }
 
         messageDialog = builder?.create()
 
@@ -111,10 +110,10 @@ class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtn
         builder?.setMessage(msg)
 
         //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
+        builder?.setPositiveButton(okBtnText) { dialog, which ->
             onYesClick.invoke()
             dialog.dismiss()
-        })
+        }
 
         messageDialog = builder?.create()
 
@@ -135,15 +134,15 @@ class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtn
         builder?.setMessage(msg)
 
         //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
+        builder?.setPositiveButton(yesBtnText) { dialog, which ->
             dialog.dismiss()
             confirmHandler.onConfirmed()
-        })
+        }
 
-        builder?.setNegativeButton(noBtnText, DialogInterface.OnClickListener { dialog, which ->
+        builder?.setNegativeButton(noBtnText) { dialog, which ->
             onDismissHandel.invoke()
             dialog.dismiss()
-        })
+        }
 
         messageDialog = builder?.create()
 

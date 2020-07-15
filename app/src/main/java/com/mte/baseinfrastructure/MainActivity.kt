@@ -137,4 +137,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         binding.fileAttach.onActivityResult(requestCode, resultCode, data)
         binding.profileImage.onActivityResult(requestCode, resultCode, data)
     }
+
+    override val okRes: Int
+        get() = TODO("Not yet implemented")
+    override val yesRes: Int
+        get() = TODO("Not yet implemented")
+    override val noRes: Int
+        get() = TODO("Not yet implemented")
 }
