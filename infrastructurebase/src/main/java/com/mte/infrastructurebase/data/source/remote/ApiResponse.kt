@@ -22,14 +22,17 @@ import kotlin.String as String1
         private val TAG: kotlin.String = "ApiResponse"
 
         @SuppressLint("LogNotTimber")
-        fun <T> create(error: Throwable): ApiErrorResponse<T?> {
+        fun <T> create(error: Throwable): ApiErrorResponse<T> {
             Log.e("ApiResponse", error.message ?: "")
             return ApiErrorResponse(ApiServiceFactory.errorHandler?.getHttpExceptionError(error))
         }
 
-        fun <T> create(response: Response<T>): ApiResponse<T?> {
+        fun <T> create(response: Response<T>): ApiResponse<T> {
 
             val body = response.body()
+                ?: return ApiErrorResponse(ApiServiceFactory.errorHandler?.getHttpExceptionError(
+                    Throwable()
+                ))
 
             if (body is BaseResponseModel)
                 body.setResponsCode(response.code())
@@ -37,13 +40,13 @@ import kotlin.String as String1
             return if (response.isSuccessful) {
 
                 if (body is BaseResponseModel && body.isSuccess())
-                    ApiSuccessResponse(response.body() )
+                    ApiSuccessResponse(response.body()!! )
                 else if (body is BaseResponseModel && body.isError()) {
                     ApiErrorResponse(body.getError())
-                } else if (body != null && body is BaseResponseModel && body.isEmpty()) {
+                } else if (body is BaseResponseModel && body.isEmpty()) {
                     ApiEmptyResponse()
                 } else {
-                    ApiSuccessResponse(body = body)
+                    ApiSuccessResponse(body = body!!)
                 }
 
             } else {
