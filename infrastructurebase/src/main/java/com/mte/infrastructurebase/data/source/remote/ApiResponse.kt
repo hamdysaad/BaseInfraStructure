@@ -29,15 +29,15 @@ import kotlin.String as String1
 
         fun <T> create(response: Response<T>): ApiResponse<T> {
 
-            val body = response.body()
-                ?: return ApiErrorResponse(ApiServiceFactory.errorHandler?.getHttpExceptionError(
-                    Throwable()
-                ))
-
-            if (body is BaseResponseModel)
-                body.setResponsCode(response.code())
-
             return if (response.isSuccessful) {
+
+                val body = response.body()
+                    ?: return ApiErrorResponse(ApiServiceFactory.errorHandler?.getHttpExceptionError(
+                        Throwable()
+                    ))
+
+                if (body is BaseResponseModel)
+                    body.setResponsCode(response.code())
 
                 if (body is BaseResponseModel && body.isSuccess())
                     ApiSuccessResponse(response.body()!! )
