@@ -24,7 +24,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.mte.infrastructurebase.R
 import com.mte.infrastructurebase.databinding.LayoutLoadingDialogDefaultBinding
-import com.mte.infrastructurebase.utils.LocaleHelperJava
+import com.mte.infrastructurebase.utils.LocaleHelper
 
 
 object  UtilsImageLoader {
@@ -59,7 +59,7 @@ object  UtilsImageLoader {
                     ).apply {
 
                         root.also {
-                            it.layoutDirection = if(LocaleHelperJava.isArabic(context)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+                            it.layoutDirection = if(LocaleHelper.isArabic(context)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
                             it.layoutParams.width = imageView.layoutParams.width
                             it.layoutParams.height = imageView.layoutParams.height
                             it.setPadding(0 ,0 ,0 ,0)
@@ -207,7 +207,7 @@ object  UtilsImageLoader {
                     ).apply {
 
                         root.also {
-                            it.layoutDirection = if(LocaleHelperJava.isArabic(context)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+                            it.layoutDirection = if(LocaleHelper.isArabic(context)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
                             it.layoutParams.width = imageView.layoutParams.width
                             it.layoutParams.height = imageView.layoutParams.height
                             it.setPadding(0 ,0 ,0 ,0)

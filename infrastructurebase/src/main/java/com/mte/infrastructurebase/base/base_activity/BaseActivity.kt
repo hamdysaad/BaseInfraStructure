@@ -16,11 +16,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.mte.infrastructurebase.R
 import com.mte.infrastructurebase.base.BaseDialog
 import com.mte.infrastructurebase.defaults.*
 import com.mte.infrastructurebase.utils.KeyboardUtils
-import com.mte.infrastructurebase.utils.LocaleHelperJava
+import com.mte.infrastructurebase.utils.LocaleHelper
 
 abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
@@ -51,11 +50,15 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     protected abstract fun initUI(savedInstanceState: Bundle?)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        LocaleHelperJava.onAttach(this)
+        LocaleHelper.onAttach(this)
         super.onCreate(savedInstanceState)
         init()
         performDataBinding()
         initUI(savedInstanceState)
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(LocaleHelper.onAttach(base))
     }
 
     open fun init() {
@@ -70,10 +73,6 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     protected open fun performDataBinding() {
         binding = DataBindingUtil.setContentView(this, layoutRes)
         binding.executePendingBindings()
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(LocaleHelperJava.onAttach(newBase))
     }
 
 

@@ -7,7 +7,8 @@ import sa.revival.shortage.koin.appModule
 import sa.revival.shortage.koin.repoModule
 import sa.revival.shortage.koin.viewModule
 
-class HamdyApp : App() {
+
+class MainApp : App() {
 
 
     override fun getAndroidContext(): Context {
@@ -23,10 +24,9 @@ class HamdyApp : App() {
         instance = this
     }
 
-
     companion object {
 
-        private var instance : HamdyApp? = null
+        private var instance : MainApp? = null
 
     }
 }

@@ -1,9 +1,8 @@
 package com.mte.infrastructurebase
 
 import android.content.Context
-import android.content.res.Configuration
 import androidx.multidex.MultiDexApplication
-import com.mte.infrastructurebase.utils.LocaleHelperJava
+import com.mte.infrastructurebase.utils.LocaleHelper
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -37,14 +36,10 @@ abstract class App : MultiDexApplication() {
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        LocaleHelperJava.onAttach(this)
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(LocaleHelper.onAttach(base, "en"))
     }
 
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext( LocaleHelperJava.onAttach(base))
-    }
 
     abstract fun getModulesList(): List<Module>
 
