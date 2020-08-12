@@ -38,6 +38,10 @@ public class LocaleHelper {
 		return getPersistedData(context, Locale.getDefault().getLanguage());
 	}
 
+	public static String getLanguage() {
+		return Locale.getDefault().getLanguage();
+	}
+
 	public static Context setLocale(Context context, String language) {
 		persist(context, language);
 
