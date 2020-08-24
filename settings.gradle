@@ -1,2 +1,3 @@
-include ':app', ':infrastructurebase'
+include ':oppwa.mobile-2.49.0'
+include ':app'
 rootProject.name='BaseInfraStructure'
