@@ -52,11 +52,12 @@ abstract class ApiServiceFactory {
             client.addInterceptor(initializeHeaders(apiConfig))
             client.readTimeout(60, TimeUnit.SECONDS);
             client.connectTimeout(60, TimeUnit.SECONDS);
+
+            apiConfig?.addOKHttpConfig(client)
+
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY
             client.addInterceptor(interceptor)
-
-            apiConfig?.addOKHttpConfig(client)
 
             return client.build()
         }
