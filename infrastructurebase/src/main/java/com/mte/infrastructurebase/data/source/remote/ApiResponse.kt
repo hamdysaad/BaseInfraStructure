@@ -36,11 +36,11 @@ sealed class ApiResponse<T> {
 
                 val errorBody = response.errorBody()?.string()
 
-                val errorFromBody = ApiServiceFactory.errorHandler?.getErrorFromBody(errorBody)
+//                val errorFromBody = ApiServiceFactory.errorHandler?.getErrorFromBody(errorBody)
 
-                val errorMsg = if (errorBody == null) response.message() else errorFromBody
+//                val errorMsg = if (errorBody == null) response.message() else errorFromBody
 
-                ApiErrorResponse(errorMsg)
+                ApiErrorBodyResponse(errorBody)
             }
         }
     }
@@ -97,3 +97,4 @@ data class ApiSuccessResponse<T>(
 }
 
 data class ApiErrorResponse<T>(val errorMessage: kotlin.String?) : ApiResponse<T>()
+data class ApiErrorBodyResponse<T>(val errorBody: kotlin.String?) : ApiResponse<T>()

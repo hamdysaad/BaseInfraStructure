@@ -7,12 +7,11 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-abstract class NetworkBoundResource<ResultType, ResponseType>
-constructor(private val contextProviders: ContextProviders) {
+abstract class NetworkBoundResource<ResultType, ResponseType, ERROR_RESSULT> constructor(private val contextProviders: ContextProviders) {
 
     var itemsData: ResultType? = null
 
-    private val result = MediatorLiveData<Resource<ResultType>>()
+    private val result = MediatorLiveData<Resource<ResultType , ERROR_RESSULT>>()
 
 
     init {
@@ -34,7 +33,7 @@ constructor(private val contextProviders: ContextProviders) {
         }
     }
 
-    private fun setValue(newValue: Resource<ResultType>) {
+    private fun setValue(newValue: Resource<ResultType , ERROR_RESSULT>) {
         if (result.value != newValue) {
             result.value = newValue
         }
@@ -73,13 +72,24 @@ constructor(private val contextProviders: ContextProviders) {
                         setValue(Resource.error(response.errorMessage, newData))
                     }
                 }
+
+                is ApiErrorBodyResponse -> {
+                    onFetchFailed()
+                    result.addSource(dbSource) { newData ->
+                        setValue(Resource.error(getErrorBody(response.errorBody) , newData , createErrorBodyResult(response.errorBody)))
+                    }
+                }
             }
         }
     }
 
+    abstract fun createErrorBodyResult(errorBody: String?): ERROR_RESSULT?
+
+    abstract fun getErrorBody(errorBody: String?): String?
+
     protected open fun onFetchFailed() {}
 
-    fun asLiveData() = result as LiveData<Resource<ResultType>>
+    fun asLiveData() = result as LiveData<Resource<ResultType , ERROR_RESSULT>>
 
     abstract fun saveCallResult(item: ResponseType)
 

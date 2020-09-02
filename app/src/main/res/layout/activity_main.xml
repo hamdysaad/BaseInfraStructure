@@ -4,9 +4,6 @@
 
     <data>
 
-        <variable
-            name="model"
-            type="com.mte.baseinfrastructure.demo.JobModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,40 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MainActivity">
-
-        <com.mte.infrastructurebase.forms.FormView
-            android:id="@+id/form"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-
-
-            <com.mte.infrastructurebase.forms.FormControlView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-              <com.mte.baseinfrastructure.forms.ImageAttachment
-                  android:id="@+id/imageAttachment"
-                  android:layout_width="200dp"
-                  android:layout_height="200dp"
-                  app:attachBinding="@={model.imageAttachment}"
-                  android:src="@drawable/ic_launcher_background"/>
-
-
-
-            </com.mte.infrastructurebase.forms.FormControlView>
-
-
-            <Button
-                android:id="@+id/submitBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="submt"/>
-
-        </com.mte.infrastructurebase.forms.FormView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

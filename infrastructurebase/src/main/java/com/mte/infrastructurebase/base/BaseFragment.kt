@@ -237,7 +237,7 @@ abstract class BaseFragment < D : ViewDataBinding>:Fragment() {
     }
 
     fun wrapingError(root : ViewGroup? ,
-                     resource : Resource<*>?,
+                     resource : Resource<* , *>?,
                      onRetryClick: (()->Unit)?  = null) {
 
         activity?.let {
@@ -249,7 +249,7 @@ abstract class BaseFragment < D : ViewDataBinding>:Fragment() {
 
     fun wrapingEmtyData(
         root : ViewGroup? ,
-        resource : Resource<*>? ,
+        resource : Resource<* , *>? ,
         onRetryClick: (()->Unit)?  = null) {
         activity?.let {
             if (it is BaseActivity<*>) {

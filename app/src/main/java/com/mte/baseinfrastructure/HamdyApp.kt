@@ -3,9 +3,6 @@ package com.mte.baseinfrastructure
 import android.content.Context
 import com.mte.infrastructurebase.App
 import org.koin.core.module.Module
-import sa.revival.shortage.koin.appModule
-import sa.revival.shortage.koin.repoModule
-import sa.revival.shortage.koin.viewModule
 
 class HamdyApp : App() {
 
@@ -15,7 +12,7 @@ class HamdyApp : App() {
     }
 
     override fun getModulesList(): List<Module> {
-        return listOf(appModule , viewModule , repoModule)
+        return emptyList()
     }
 
     override fun onCreate() {

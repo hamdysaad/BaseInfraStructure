@@ -9,15 +9,14 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
-import com.mte.infrastructurebase.R
 import com.mte.infrastructurebase.base.base_activity.OnRetryClick
 import com.mte.infrastructurebase.data.source.remote.Resource
 import com.mte.infrastructurebase.data.source.remote.Status
 import com.mte.infrastructurebase.databinding.DefaultEmptyDataLayoutBinding
 import com.mte.infrastructurebase.databinding.DefaultErrorLayoutBinding
+import com.mte.infrastructurebase.R
 
-
-abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context?, var resource: Resource<ArrayList<T>?>? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context?, var resource: Resource<ArrayList<T>? , *>? = null) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     open val emptyDataText: String? = "No Data Found"
@@ -25,22 +24,39 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
     open val errorMessage : String? = "an error has occurred"
 
     @get:LayoutRes
-    open val loadingLayout : Int = R.layout.layout_loading_dialog_default
+    open val loadingLayout : Int = com.mte.infrastructurebase.R.layout.layout_loading_dialog_default
 
     @get:LayoutRes
     open val emptylayout : Int = R.layout.default_empty_data_layout
 
     @get:LayoutRes
-    open val errorLayout : Int =R.layout.default_error_layout
+    open val errorLayout : Int = R.layout.default_error_layout
 
     @get:LayoutRes
     abstract val  itemLayoutRes : Int
 
-   open fun createDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+
+
+    open fun createDataViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         return DataItemVH(LayoutInflater.from(parent.context).inflate(itemLayoutRes, parent, false))
     }
 
     protected abstract fun bindDataViewHolder(binding : BINDING? , item : T? , position: Int)
+
+    protected open fun bindEmptyViewHolder(
+        holder: BaseRVAdapter<* , *>.EmptyItem,
+        resource: Resource<ArrayList<T>? , *>?){
+
+        holder.bind(resource)
+    }
+
+    protected open fun bindErrorViewHolder(
+        holder:  BaseRVAdapter<* , *>.ErrorItem,
+        resource: Resource<ArrayList<T>?, *>?){
+
+        holder.bind(resource)
+    }
+
 
     protected abstract fun onRetry()
 
@@ -57,9 +73,9 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
     }
 
 
-    fun submitData(data: Resource<List<*>?>?) {
+    fun submitData(data: Resource<List<*>?, *>?) {
         data?.let {
-            resource = it as Resource<ArrayList<T>?>?
+            resource = it as Resource<ArrayList<T>? , *>?
             notifyDataSetChanged()
             if (data.status == Status.ERROR) {
                 Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
@@ -80,9 +96,9 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         when(holder){
-            is BaseRVAdapter<* , *>.ErrorItem -> { holder.bind(resource)}
+            is BaseRVAdapter<* , *>.ErrorItem -> { bindErrorViewHolder(holder  , resource)}
             is BaseRVAdapter<* , *>.LoadingItem -> {}
-            is BaseRVAdapter<* , *>.EmptyItem -> { holder.bind(resource)}
+            is BaseRVAdapter<* , *>.EmptyItem -> { bindEmptyViewHolder(holder , resource)}
             else ->bindDataViewHolder(DataBindingUtil.bind<BINDING>(holder .itemView), getItem(position), position)
         }
     }
@@ -94,7 +110,7 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
 
     override fun getItemCount(): Int {
         if (getItems().isNullOrEmpty()) {
-           return when (resource?.status ?:  Status.EMPTY  ) {
+            return when (resource?.status ?:  Status.EMPTY  ) {
                 Status.LOADING,
                 Status.ERROR,
                 Status.SUCCESS,
@@ -133,11 +149,11 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
 
     inner class ErrorItem(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(resource: Resource<*>?) {
+        fun bind(resource: Resource<* , *>?) {
             val binding = DataBindingUtil.bind<DefaultErrorLayoutBinding>(itemView)
             binding?.text = resource?.message?: errorMessage
             binding?.tryAgainText = retryAgainText
-            binding?.iTryClick = object : OnRetryClick{
+            binding?.iTryClick = object : OnRetryClick {
                 override fun onRetry() {
                     this@BaseRVAdapter.onRetry()
                 }
@@ -148,7 +164,7 @@ abstract class BaseRVAdapter<T , BINDING : ViewDataBinding>(val context: Context
 
 
     inner class EmptyItem(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bind(resource: Resource<*>?) {
+        fun bind(resource: Resource<* , *>?) {
             val binding = DataBindingUtil.bind<DefaultEmptyDataLayoutBinding>(itemView)
             binding?.text = emptyDataText
         }
