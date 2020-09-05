@@ -1,12 +1,11 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package com.mte.infrastructurebase.base.base_activity
 
 import android.content.Context
-import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +20,7 @@ import com.mte.infrastructurebase.defaults.*
 import com.mte.infrastructurebase.utils.KeyboardUtils
 import com.mte.infrastructurebase.utils.LocaleHelper
 
-abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
+abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
 
 
     protected var dialogLoading: IDialogLoading? = null
@@ -31,12 +30,13 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     protected var wrapEmptyData: IWrapEmptyData?  = null
 
 
-    lateinit var binding: T
+    var binding: T? = null
 
     @get:LayoutRes
     protected abstract val layoutRes: Int
 
     @get:StringRes
+    protected open val okString: Int? = null
     protected open val yesString: Int? = null
     protected open val noString:  Int? = null
 
@@ -44,29 +44,45 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         LocaleHelper.onAttach(this)
+
         super.onCreate(savedInstanceState)
+
         init()
-        performDataBinding()
+
+        setActivityContentView(this)
+
         initUI(savedInstanceState)
+    }
+
+    open fun setActivityContentView(activity  : AppCompatActivity) {
+        binding = DataBindingUtil.setContentView<T>(this , layoutRes)
+        binding?.executePendingBindings()
+    }
+
+    protected fun inflateLayout(layout : Int): View? {
+        return layoutInflater.inflate(
+            layout,
+            null,
+            false)
     }
 
     open fun init() {
         dialogLoading   = DefaultDialogLoading(this)
-        dialogAlert     = DefaultDialogAlert(this , yesString?.let { getString(it) } ?: "Yes", noString?.let { getString(it) } ?: "No")
+        dialogAlert     = DefaultDialogAlert(this , okString?.let { getString(it) } ?: "ok",yesString?.let { getString(it) } ?: "Yes", noString?.let { getString(it) } ?: "No")
         wrapLoading     = DefaultWrapLoading(this)
         wrapError       = DefaultWrapError(this)
         wrapEmptyData   = DefaultWrapEmptyData(this)
     }
 
-
-    protected open fun performDataBinding() {
-        binding = DataBindingUtil.setContentView(this, layoutRes)
-        binding.executePendingBindings()
-    }
-
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleHelper.onAttach(newBase))
     }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        LocaleHelper.onAttach(this)
+        super.onConfigurationChanged(newConfig)
+    }
+
 
 
     /**
@@ -186,75 +202,70 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     /**
      * show message dialog
      */
-    fun showInfoMsgDialog(message: String?) {
-        if(message == null) return
-
-        runOnUiThread { dialogAlert?.showInfoMsg(message) }
+    fun showInfoMsgDialog(msg : String? , title : String? = null) {
+        if(msg == null) return
+        runOnUiThread { dialogAlert?.showInfoMsg(msg , title) }
     }
 
     /**
      * show message dialog
      */
-    fun showSuccessMsgDialog(message: String?) {
-        if(message == null) return
-        runOnUiThread { dialogAlert?.showSuccessMsg(message) }
-    }
-    fun showSuccessMsgDialog(message: String? ,onYesClick:()->Unit) {
-        if(message == null) return
-        runOnUiThread { dialogAlert?.showSuccessMsg(message,onYesClick = onYesClick) }
+    fun showSuccessMsgDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        positiveBtn : String? = null ) {
+
+        if(msg == null) return
+        runOnUiThread { dialogAlert?.showSuccessMsg(msg , title , positiveBtnHandler , positiveBtn) }
     }
 
     /**
      * show Error message dialog
      */
-    fun showErrorMsgDialog(message: String?) {
-        if(message == null) return
-        runOnUiThread { dialogAlert?.showErrorMsg(message)
+    fun showErrorMsgDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtn : String? = null,
+        negativeBtn : String? = null,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null
 
+    ) {
+        if(msg == null) return
+            runOnUiThread { dialogAlert?.showErrorMsg(msg , title , positiveBtn , negativeBtn , positiveBtnHandler , negativeBtnHandler)
         }
     }
 
     /**
      * show Warning message dialog
      */
-    fun showWarningMsgDialog(message: String?) {
-        if(message == null) return
-        runOnUiThread { dialogAlert?.showWarningMsg(message) }
+    fun showWarningMsgDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtn : String? = null,
+        negativeBtn : String? = null,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null
+    ) {
+        if(msg == null) return
+        runOnUiThread { dialogAlert?.showWarningMsg(msg , title , positiveBtn , negativeBtn , positiveBtnHandler , negativeBtnHandler) }
     }
 
     /**
      * Show confirm message dialog loading
      */
-    fun showConfirmMessagDialog(message: String?, yesAction: () -> Unit) {
-        if(message == null) return
+    fun showConfirmMessagDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null,
+        positiveBtn : String? = null,
+        negativeBtn : String? = null
+    ) {
+        if(msg == null) return
         runOnUiThread {
-            dialogAlert?.showConfirmationMsg(message, object : ConfirmHandler {
-                override fun onConfirmed() {
-                    yesAction.invoke()
-                }
-            })
-        }
-    }
-
-    fun showConfirmMessagDialog(message: String?, yesAction: () -> Unit ,onCancelClick:()->Unit) {
-        if(message == null) return
-        runOnUiThread {
-            dialogAlert?.showConfirmationMsg(message, object : ConfirmHandler {
-                override fun onConfirmed() {
-                    yesAction.invoke()
-                }
-            },onDismissHandel = onCancelClick)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        onActivityResultHandler(requestCode, resultCode, data)
-    }
-
-    open fun onActivityResultHandler(requestCode: Int, resultCode: Int, data: Intent?) {
-        supportFragmentManager.fragments.forEach {
-            it.onActivityResult(requestCode, resultCode, data)
+            dialogAlert?.showConfirmationMsg(msg , title , positiveBtn , negativeBtn , positiveBtnHandler , negativeBtnHandler)
         }
     }
 
@@ -273,7 +284,7 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
     ) {
 
         runOnUiThread {
-            wrapError?.addErrorView(root , msg  , object : OnRetryClick{
+            wrapError?.addErrorView(root , msg  , object : OnRetryClick {
                 override fun onRetry() {
                     onRetryClick?.invoke()
                 }
@@ -295,7 +306,6 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
                 wrapEmptyData?.addEmptyView(root)
             else wrapEmptyData?.addEmptyView(root , msg)
         }
-
     }
 
 
@@ -304,27 +314,9 @@ abstract class BaseActivity<T : ViewDataBinding> : AppCompatActivity() {
         dialogListFragment.show(ft, "dialog")
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        onRequestPermissionsResultHandler(requestCode , permissions , grantResults)
-
-
-    }
-
-    open fun onRequestPermissionsResultHandler(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-
-        supportFragmentManager.fragments.forEach {
-            it.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
+    fun showToast(msg : String? , duration : Int = Toast.LENGTH_SHORT){
+        msg ?: return
+        Toast.makeText(this , msg , duration).show()
     }
 
 

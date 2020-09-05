@@ -1,10 +1,10 @@
 package com.mte.infrastructurebase.base
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
@@ -13,13 +13,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mte.infrastructurebase.base.base_activity.BaseActivity
-import com.mte.infrastructurebase.data.source.remote.Resource
 
 abstract class BaseFragment < D : ViewDataBinding>:Fragment() {
 
     var isShown: Boolean = false
-    protected lateinit var binding: D
 
+    protected lateinit var binding: D
 
 
     @get:LayoutRes
@@ -31,6 +30,14 @@ abstract class BaseFragment < D : ViewDataBinding>:Fragment() {
         binding.executePendingBindings()
         return binding.root
     }
+
+    protected fun inflateLayout(layout : Int): View? {
+        return layoutInflater.inflate(
+            layout,
+            null,
+            false)
+    }
+
     protected abstract fun initUI(savedInstanceState: Bundle?)
 
     fun <VH : RecyclerView.ViewHolder> setUpRcv(rcv: RecyclerView, adapter: RecyclerView.Adapter<VH>) {
@@ -134,77 +141,99 @@ abstract class BaseFragment < D : ViewDataBinding>:Fragment() {
         }
     }
 
-    fun showErrorMsgDialog(message : String?) {
 
-        if(message == null) return
+
+    /**
+     * show message dialog
+     */
+    fun showInfoMsgDialog(msg : String? , title : String? = null) {
+        if(msg == null) return
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showErrorMsgDialog(message)
+                it.showInfoMsgDialog(msg , title)
             }
         }
     }
 
-    fun showSuccessMsgDialog(message : String?) {
+    /**
+     * show message dialog
+     */
+    fun showSuccessMsgDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        positiveBtn : String? = null ) {
 
-        if(message == null) return
+        if(msg == null) return
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showSuccessMsgDialog(message)
+                it.showSuccessMsgDialog(msg , title, positiveBtnHandler, positiveBtn)
             }
         }
     }
 
-    fun showSuccessMsgDialog(message : String?,onYesClick:()->Unit) {
+    /**
+     * show Error message dialog
+     */
+    fun showErrorMsgDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtn : String,
+        negativeBtn : String? = null,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null
 
-        if(message == null) return
+    ) {
+        if(msg == null) return
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showSuccessMsgDialog(message,onYesClick)
+                it.showErrorMsgDialog(msg , title , positiveBtn , negativeBtn, positiveBtnHandler, negativeBtnHandler)
             }
         }
     }
 
-    fun showInfoMsgDialog(message : String?) {
-
-        if(message == null) return
+    /**
+     * show Warning message dialog
+     */
+    fun showWarningMsgDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtn : String? = null,
+        negativeBtn : String? = null,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null
+    ) {
+        if(msg == null) return
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showInfoMsgDialog(message)
+                it.showWarningMsgDialog(msg , title, positiveBtn, negativeBtn, positiveBtnHandler, negativeBtnHandler)
             }
         }
     }
 
-    fun showWarningMsgDialog(message : String?) {
-
-        if(message == null) return
+    /**
+     * Show confirm message dialog loading
+     */
+    fun showConfirmMessagDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null,
+        positiveBtn : String? = null,
+        negativeBtn : String? = null
+    ) {
+        if(msg == null) return
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showWarningMsgDialog(message)
+                it.showConfirmMessagDialog(msg , title, positiveBtnHandler, negativeBtnHandler, positiveBtn, negativeBtn )
             }
         }
     }
-
-    fun showConfirmMessagDialog(message : String , yesAction : () -> Unit) {
-        activity?.let {
-            if (it is BaseActivity<*>) {
-                it.showConfirmMessagDialog(message , yesAction)
-            }
-        }
-    }
-
-    fun showConfirmMessagDialog(message : String , yesAction : () -> Unit ,onCncelClick:()->Unit) {
-        activity?.let {
-            if (it is BaseActivity<*>) {
-                it.showConfirmMessagDialog(message , yesAction ,onCncelClick)
-            }
-        }
-    }
-
 
 
     fun openDialogFragment(dialogListFragment: BaseDialog<*>) {
@@ -237,77 +266,37 @@ abstract class BaseFragment < D : ViewDataBinding>:Fragment() {
     }
 
     fun wrapingError(root : ViewGroup? ,
-                     resource : Resource<* , *>?,
+                     message : String?,
                      onRetryClick: (()->Unit)?  = null) {
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.wrapinError(resource?.message , root , onRetryClick )
+                it.wrapinError(message , root , onRetryClick )
             }
         }
     }
 
     fun wrapingEmtyData(
         root : ViewGroup? ,
-        resource : Resource<* , *>? ,
+        message : String?,
         onRetryClick: (()->Unit)?  = null) {
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.wrapinEmptyData(resource?.message , root , onRetryClick)
+                it.wrapinEmptyData(message , root , onRetryClick)
             }
         }
     }
 
-    fun onBackbressed(): Boolean {
-
-        var beforelasFragment : Fragment? = null
-
-        if(isShown){
-            var count = childFragmentManager.backStackEntryCount
-
-            while (count != 0){
-                val name =  childFragmentManager.getBackStackEntryAt(count-1).name
-                beforelasFragment = childFragmentManager.findFragmentByTag(name)
-                count = beforelasFragment?.childFragmentManager?.backStackEntryCount?: 0
-            }
-
-            if(beforelasFragment != null) {
-                childFragmentManager.popBackStack()
-                return true
-            }
-        }
-
+    open fun onBackPressed(): Boolean {
         return false
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        val count = childFragmentManager.backStackEntryCount
-
-        for(i in 0 until count){
-            val name = childFragmentManager.getBackStackEntryAt(i).name
-            val frag = childFragmentManager.findFragmentByTag(name)
-            if(frag is BaseFragment<*>)
-                frag.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        }
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        val count = childFragmentManager.backStackEntryCount
-
-        for(i in 0 until count){
-            val name = childFragmentManager.getBackStackEntryAt(i).name
-            val frag = childFragmentManager.findFragmentByTag(name)
-            if(frag is BaseFragment<*>)
-                frag.onActivityResult(requestCode, resultCode, data)
+    fun showToast(msg : String? , duration : Int = Toast.LENGTH_SHORT){
+        activity?.let {
+            if (it is BaseActivity<*>) {
+                it.showToast(msg , duration)
+            }
         }
     }
 

@@ -12,6 +12,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun initUI(savedInstanceState: Bundle?) {
 
 
+        showConfirmMessagDialog(
+            msg = "Confirm msg , Do you want to open error msg?"
+//            , positiveBtn =  "confirm"
+//            , negativeBtn = "No"
+            , negativeBtnHandler = {
+                binding?.mainContainer?.id?.let { replaceFragment(MainFragment() , it, false) }
+            }
+            , positiveBtnHandler = {
+                showErrorMsgDialog(
+                    msg = "Error message dialog , Do you want to show success Message",
+                    positiveBtn = "show success message",
+                    positiveBtnHandler = { showSuccessMsgDialog("Success Message , to show info message" , positiveBtnHandler = {showInfoMsgDialog("info messsage")}) }
+//                    , negativeBtn = "No"
+                )
+            })
+
+
         /*object : NetworkBoundResource<List<String>, LoginResponse, List<ValidatonError>>() {
             override fun createErrorBodyResult(errorBody: String?): List<ValidatonError>? {
                 TODO("Not yet implemented")

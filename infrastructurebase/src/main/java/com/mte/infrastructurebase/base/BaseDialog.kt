@@ -119,27 +119,7 @@ abstract class BaseDialog<T : ViewDataBinding> : DialogFragment() {
         }
     }
 
-    fun showErrorMsgDialog(message : String?) {
 
-        if(message == null) return
-
-        activity?.let {
-            if (it is BaseActivity<*>) {
-                it.showErrorMsgDialog(message)
-            }
-        }
-    }
-
-    fun showInfoMsgDialog(message : String?) {
-
-        if(message == null) return
-
-        activity?.let {
-            if (it is BaseActivity<*>) {
-                it.showInfoMsgDialog(message)
-            }
-        }
-    }
 
     fun hideKeyboard() {
         if (dialog!!.currentFocus != null) {
@@ -151,51 +131,94 @@ abstract class BaseDialog<T : ViewDataBinding> : DialogFragment() {
         }}
 
 
-    fun showSuccessMsgDialog(message : String?) {
-
-        if(message == null) return
+    /**
+     * show message dialog
+     */
+    fun showInfoMsgDialog(msg : String? , title : String? = null) {
+        if(msg == null) return
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showSuccessMsgDialog(message)
+                it.showInfoMsgDialog(msg , title)
             }
         }
     }
 
-    fun showSuccessMsgDialog(message : String?,onYesClick:()->Unit) {
+    /**
+     * show message dialog
+     */
+    fun showSuccessMsgDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        positiveBtn : String? ) {
 
-        if(message == null) return
+        if(msg == null) return
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showSuccessMsgDialog(message,onYesClick)
+                it.showSuccessMsgDialog(msg , title, positiveBtnHandler, positiveBtn)
             }
         }
     }
 
+    /**
+     * show Error message dialog
+     */
+    fun showErrorMsgDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtn : String,
+        negativeBtn : String? = null,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null
 
-
-    fun showWarningMsgDialog(message : String?) {
-
-        if(message == null) return
+    ) {
+        if(msg == null) return
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showWarningMsgDialog(message)
+                it.showErrorMsgDialog(msg , title , positiveBtn , negativeBtn, positiveBtnHandler, negativeBtnHandler)
             }
         }
     }
 
-    fun showConfirmMessagDialog(message : String , yesAction : () -> Unit) {
+    /**
+     * show Warning message dialog
+     */
+    fun showWarningMsgDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtn : String? = null,
+        negativeBtn : String? = null,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null
+    ) {
+        if(msg == null) return
+
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showConfirmMessagDialog(message , yesAction)
+                it.showWarningMsgDialog(msg , title, positiveBtn, negativeBtn, positiveBtnHandler, negativeBtnHandler)
             }
         }
-    }fun showConfirmMessagDialog(message : String , yesAction : () -> Unit,onCancelClick:()->Unit) {
+    }
+
+    /**
+     * Show confirm message dialog loading
+     */
+    fun showConfirmMessagDialog(
+        msg : String? ,
+        title : String? = null ,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null,
+        positiveBtn : String? = null,
+        negativeBtn : String? = null
+    ) {
+        if(msg == null) return
+
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showConfirmMessagDialog(message , yesAction,onCancelClick)
+                it.showConfirmMessagDialog(msg , title, positiveBtnHandler, negativeBtnHandler, positiveBtn, negativeBtn )
             }
         }
     }

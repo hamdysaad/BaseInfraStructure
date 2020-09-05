@@ -1,13 +1,15 @@
 package com.mte.infrastructurebase.defaults
 
 import android.content.Context
-import android.content.DialogInterface
 import androidx.appcompat.app.AlertDialog
-import com.mte.infrastructurebase.base.base_activity.ConfirmHandler
 import com.mte.infrastructurebase.base.base_activity.IDialogAlert
 
-class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtnText: String) :
-    IDialogAlert {
+class DefaultDialogAlert(
+    val context: Context,
+    val okBtnText: String,
+    val yesBtnText: String,
+    val noBtnText: String
+) : IDialogAlert {
 
 
     private var builder: AlertDialog.Builder? = null
@@ -31,45 +33,17 @@ class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtn
 
     }
 
-
-    override fun showInfoMsg(msg: String, title: String?) {
-
-
-        if (messageDialog?.isShowing == true) return
-
-
-        builder?.setTitle(title)
-        builder?.setMessage(msg)
-
-        //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
-            dialog.dismiss()
-        })
-
-        messageDialog = builder?.create()
-
-        messageDialog?.show()
-    }
-
-    override fun showWarningMsg(msg: String, title: String?) {
-
-        if (messageDialog?.isShowing == true) return
+    private fun showDialog(
+        msg: String?,
+        title: String?,
+        positiveBtn : String? = okBtnText,
+        negativeBtn : String? = null,
+        positiveBtnHandler : (() -> Unit) ? = null,
+        negativeBtnHandler : (() -> Unit) ? = null
+    ) {
 
 
-        builder?.setTitle(title)
-        builder?.setMessage(msg)
-
-        //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
-            dialog.dismiss()
-        })
-
-        messageDialog = builder?.create()
-
-        messageDialog?.show()
-    }
-
-    override fun showErrorMsg(msg: String, title: String?) {
+        msg ?: return
 
         if (messageDialog?.isShowing == true) return
 
@@ -77,87 +51,65 @@ class DefaultDialogAlert(val context: Context, val yesBtnText: String, val noBtn
         builder?.setMessage(msg)
 
         //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
+        builder?.setPositiveButton(positiveBtn) { dialog, which ->
             dialog.dismiss()
-        })
-
-        messageDialog = builder?.create()
-
-        messageDialog?.show()
-    }
-
-    override fun showSuccessMsg(msg: String, title: String?) {
-
-        if (messageDialog?.isShowing == true) return
-
-        builder?.setTitle(title)
-        builder?.setMessage(msg)
-
-        //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
-            dialog.dismiss()
-        })
-
-        messageDialog = builder?.create()
-
-        messageDialog?.show()
-    }
-
-    override fun showSuccessMsg(msg: String, title: String?, onYesClick: () -> Unit) {
-
-        if (messageDialog?.isShowing == true) return
-
-        builder?.setTitle(title)
-        builder?.setMessage(msg)
-
-        //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
-            onYesClick.invoke()
-            dialog.dismiss()
-        })
-
-        messageDialog = builder?.create()
-
-        messageDialog?.show()
-    }
-
-    override fun showConfirmationMsg(msg: String, confirmHandler: ConfirmHandler, title: String?) {
-
-        confirmationImpelimantaion(msg, confirmHandler, title) {
+            positiveBtnHandler?.invoke()
         }
 
-    }
 
-    fun confirmationImpelimantaion(msg: String, confirmHandler: ConfirmHandler, title: String? ,onDismissHandel: () -> Unit) {
-        if (messageDialog?.isShowing == true) return
+        //negative btn Action
+        negativeBtn.let { it ->
+            builder?.setNegativeButton(it) { dialog, which ->
+                dialog.dismiss()
+                negativeBtnHandler?.invoke()
+            }
+        }
 
-        builder?.setTitle(title)
-        builder?.setMessage(msg)
-
-        //Yes Action
-        builder?.setPositiveButton(yesBtnText, DialogInterface.OnClickListener { dialog, which ->
-            dialog.dismiss()
-            confirmHandler.onConfirmed()
-        })
-
-        builder?.setNegativeButton(noBtnText, DialogInterface.OnClickListener { dialog, which ->
-            onDismissHandel.invoke()
-            dialog.dismiss()
-        })
 
         messageDialog = builder?.create()
-
         messageDialog?.show()
+    }
+
+    override fun showInfoMsg(msg: String, title: String?) {
+       showDialog(msg , title)
+    }
+
+    override fun showWarningMsg(
+        msg: String,
+        title: String?,
+        positiveBtn: String?,
+        negativeBtn: String?,
+        positiveBtnHandler: (() -> Unit)?,
+        negativeBtnHandler: (() -> Unit)?
+    ) {
+        showDialog(msg , title , positiveBtn  , negativeBtn , positiveBtnHandler  , negativeBtnHandler )
+    }
+
+    override fun showErrorMsg(
+        msg: String,
+        title: String?,
+        positiveBtn: String?,
+        negativeBtn: String?,
+        positiveBtnHandler: (() -> Unit)?,
+        negativeBtnHandler: (() -> Unit)?
+    ) {
+        showDialog(msg , title , positiveBtn , negativeBtn , positiveBtnHandler  , negativeBtnHandler )
+    }
+
+    override fun showSuccessMsg(msg: String?, title: String?, positiveBtnHandler: (() -> Unit)? , positiveBtn: String?) {
+        showDialog(msg , title , positiveBtn ?: okBtnText , null , positiveBtnHandler )
     }
 
     override fun showConfirmationMsg(
         msg: String,
-        confirmHandler: ConfirmHandler,
-        onDismissHandel: () -> Unit,
-        title: String?
-    ) {
-        confirmationImpelimantaion(msg, confirmHandler, title) {
-            onDismissHandel.invoke()
-        }    }
+        title: String?,
+        positiveBtn: String?,
+        negativeBtn: String?,
+        positiveBtnHandler: (() -> Unit)?,
+        negativeBtnHandler: (() -> Unit)? ) {
+
+        showDialog(msg , title , positiveBtn ?: yesBtnText , negativeBtn ?: noBtnText , positiveBtnHandler  , negativeBtnHandler )
+    }
+
 
 }
