@@ -1,10 +1,17 @@
 package com.mte.baseinfrastructure
 
 import android.os.Bundle
+import android.view.View
 import com.mte.baseinfrastructure.databinding.ActivityMainBinding
 import com.mte.infrastructurebase.base.base_activity.BaseActivity
+import com.mte.infrastructurebase.base_toolbar.BaseToolbarActivity
 
-class MainActivity : BaseActivity<ActivityMainBinding>() {
+class MainActivity : BaseToolbarActivity<ActivityMainBinding>() {
+
+
+    override fun createToolbarView(): View? {
+        return null
+    }
 
     override val layoutRes: Int
         get() = R.layout.activity_main

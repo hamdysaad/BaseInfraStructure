@@ -13,8 +13,16 @@ abstract class BaseToolbarActivity<T : ViewDataBinding> : BaseActivity<T>() {
 
     override fun setActivityContentView(activity: AppCompatActivity) {
        val basToolbarBinding = DataBindingUtil.setContentView<BaseActivityToolbarBinding>(this , R.layout.base_activity_toolbar)
-        basToolbarBinding.toolbarContainer.addView(createToolbarView())
-        basToolbarBinding.toolbarContent.addView(createContent())
+
+        createToolbarView()?.let {
+            basToolbarBinding.toolbarContainer.addView(it)
+        }
+
+        createContent()?.let {
+            basToolbarBinding.toolbarContent.addView(it)
+        }
+
+
         basToolbarBinding?.executePendingBindings()
     }
 
