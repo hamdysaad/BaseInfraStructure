@@ -23,14 +23,13 @@ abstract class BaseToolbarFragment<T : ViewDataBinding> : BaseFragment<T>() {
 
         basToolbarBinding = inflateLayout(R.layout.base_activity_toolbar)?.let {
             DataBindingUtil.bind<BaseActivityToolbarBinding>(it)?.let { baseBinding ->
-                baseBinding.toolbarContainer.addView(createToolbarView())
-                baseBinding.toolbarContent.addView(
-                    super.onCreateView(
-                        inflater,
-                        container,
-                        savedInstanceState
-                    )
-                )
+
+                createToolbarView()?.let { toolbarView -> baseBinding.toolbarContainer.addView(toolbarView) }
+
+                super.onCreateView(inflater, container, savedInstanceState)?.let { view ->
+                    baseBinding.toolbarContent.addView(view)
+                }
+
                 baseBinding
             }
         }
