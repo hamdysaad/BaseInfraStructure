@@ -180,7 +180,7 @@ abstract class BaseFragment < D : ViewDataBinding>:Fragment() {
     fun showErrorMsgDialog(
         msg : String? ,
         title : String? = null ,
-        positiveBtn : String,
+        positiveBtn : String? = null,
         negativeBtn : String? = null,
         positiveBtnHandler : (() -> Unit) ? = null,
         negativeBtnHandler : (() -> Unit) ? = null
