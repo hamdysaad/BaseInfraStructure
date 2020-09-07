@@ -26,7 +26,7 @@ abstract class BaseToolbarFragment<T : ViewDataBinding> : BaseFragment<T>() {
 
                 createToolbarView()?.let { toolbarView -> baseBinding.toolbarContainer.addView(toolbarView) }
 
-                super.onCreateView(inflater, container, savedInstanceState)?.let { view ->
+                createContentView(inflater , container , savedInstanceState)?.let{view ->
                     baseBinding.toolbarContent.addView(view)
                 }
 
@@ -35,6 +35,14 @@ abstract class BaseToolbarFragment<T : ViewDataBinding> : BaseFragment<T>() {
         }
 
         return basToolbarBinding?.root
+    }
+
+    open fun createContentView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return  super.onCreateView(inflater, container, savedInstanceState)
     }
 
 
