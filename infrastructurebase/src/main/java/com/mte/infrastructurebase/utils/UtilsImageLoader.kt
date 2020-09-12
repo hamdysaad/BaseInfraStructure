@@ -51,74 +51,17 @@ object  UtilsImageLoader {
             if (isProgress) {
 
                 loadingBinding =
-                    DataBindingUtil.inflate<LayoutLoadingDialogDefaultBinding>(
+                    DataBindingUtil.inflate(
                         LayoutInflater.from(context),
                         R.layout.layout_loading_dialog_default,
                         parent,
-                        false
-                    ).apply {
-
-                        root.also {
-                            it.layoutDirection = if(LocaleHelper.isArabic(context)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
-                            it.layoutParams.width = imageView.layoutParams.width
-                            it.layoutParams.height = imageView.layoutParams.height
-                            it.setPadding(0 ,0 ,0 ,0)
-                            it.id = imageView.id
-                        }
-
-                        contentLoading.also {
-                            it.layoutParams.also {lp ->
-                                if(imageView.layoutParams.width <= 120){
-                                    lp.width = imageView.layoutParams.width
-                                    lp.height = imageView.layoutParams.height
-                                }
-                            }
-//
-                        }
-                    }
-
-
-                val layoutParams: ViewGroup.LayoutParams
-
-                //If Parent is ConstraintLayout
-                if (parent is ConstraintLayout) {
-
-                    val params = imageView.layoutParams as ConstraintLayout.LayoutParams
-
-                    layoutParams = ConstraintLayout.LayoutParams(
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT,
-                        ConstraintLayout.LayoutParams.WRAP_CONTENT
-                    ).apply {
-
-                        startToStart = params.startToStart
-                        startToEnd = params.startToEnd
-                        endToEnd = params.endToEnd
-                        endToStart = params.endToStart
-
-                        topToTop = params.topToTop
-                        topToBottom = params.topToBottom
-                        bottomToBottom = params.bottomToBottom
-                        bottomToTop = params.bottomToTop
-
-                        topMargin = params.topMargin
-
-                        width = params.width
-                        height = params.height
-                    }
-
-                } else
-                    layoutParams = imageView.layoutParams
-
-                loadingBinding.root.also {
-                    it.layoutParams = layoutParams
-                }
-
+                        false)
 
                 if ( loadingBinding.root.parent != null) {
                     ( loadingBinding.root.parent as ViewGroup).removeView( loadingBinding.root) // <- fix
                 }
 
-                parent.addView(loadingBinding.root , layoutParams)
+                parent.addView(loadingBinding.root)
             }
 
             val glideCallback = object : RequestListener<Drawable> {
