@@ -3,6 +3,7 @@ package com.mte.baseinfrastructure
 import android.content.Context
 import com.mte.infrastructurebase.App
 import org.koin.core.module.Module
+import timber.log.Timber
 
 class HamdyApp : App() {
 
@@ -18,6 +19,8 @@ class HamdyApp : App() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        Timber.e("Timber init")
     }
 
 

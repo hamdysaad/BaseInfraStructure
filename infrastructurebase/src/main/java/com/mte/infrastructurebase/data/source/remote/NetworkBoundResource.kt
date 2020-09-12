@@ -83,9 +83,9 @@ abstract class NetworkBoundResource<ResultType, ResponseType, ERROR_RESSULT> con
         }
     }
 
-    abstract fun createErrorBodyResult(errorBody: String?): ERROR_RESSULT?
+    open fun createErrorBodyResult(errorBody: String?): ERROR_RESSULT? = null
 
-    abstract fun getErrorBody(errorBody: String?): String?
+    open fun getErrorBody(errorBody: String?): String? = null
 
     protected open fun onFetchFailed() {}
 
@@ -93,7 +93,7 @@ abstract class NetworkBoundResource<ResultType, ResponseType, ERROR_RESSULT> con
 
     abstract fun saveCallResult(item: ResponseType)
 
-    abstract fun getResult() : ResultType?
+    open fun getResult() : ResultType? = itemsData
 
     protected fun processResponse(response: ApiSuccessResponse<ResponseType>) = response.body
 

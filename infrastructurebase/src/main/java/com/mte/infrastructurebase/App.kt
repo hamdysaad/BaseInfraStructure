@@ -26,10 +26,6 @@ abstract class App : MultiDexApplication() {
             modules(getModules())
             androidContext(getAndroidContext())
         }
-
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
         appInstance = this
     }
 

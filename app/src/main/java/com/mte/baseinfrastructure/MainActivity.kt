@@ -2,9 +2,12 @@ package com.mte.baseinfrastructure
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.LiveData
 import com.mte.baseinfrastructure.databinding.ActivityMainBinding
 import com.mte.infrastructurebase.base.base_activity.BaseActivity
 import com.mte.infrastructurebase.base_toolbar.BaseToolbarActivity
+import com.mte.infrastructurebase.data.source.remote.ApiResponse
+import com.mte.infrastructurebase.data.source.remote.NetworkBoundResource
 
 class MainActivity : BaseToolbarActivity<ActivityMainBinding>() {
 
@@ -37,19 +40,8 @@ class MainActivity : BaseToolbarActivity<ActivityMainBinding>() {
 
 
         /*object : NetworkBoundResource<List<String>, LoginResponse, List<ValidatonError>>() {
-            override fun createErrorBodyResult(errorBody: String?): List<ValidatonError>? {
-                TODO("Not yet implemented")
-            }
-
-            override fun getErrorBody(errorBody: String?): String? {
-                TODO("Not yet implemented")
-            }
 
             override fun saveCallResult(item: LoginResponse) {
-                TODO("Not yet implemented")
-            }
-
-            override fun getResult(): List<String>? {
                 TODO("Not yet implemented")
             }
 
