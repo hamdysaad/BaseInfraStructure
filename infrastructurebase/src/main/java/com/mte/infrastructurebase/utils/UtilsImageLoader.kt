@@ -74,9 +74,10 @@ object  UtilsImageLoader {
 
                     Handler().post {
 
+                        if(isProgress) parent.removeView(loadingBinding?.root)
+
                         if(error != null ) {
                             imageView.setImageDrawable(error)
-                            parent.removeView(loadingBinding?.root)
                         }
 
                     }
@@ -91,15 +92,14 @@ object  UtilsImageLoader {
                     isFirstResource: Boolean
                 ): Boolean {
                     Handler().post {
+                        if(isProgress) parent.removeView(loadingBinding?.root)
                         imageView.setImageDrawable(resource)
-                        parent.removeView(loadingBinding?.root)
                     }
                     return true
                 }
             }
 
             val options = RequestOptions()
-//                .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH)
                 .placeholder(placeholder)
@@ -112,9 +112,12 @@ object  UtilsImageLoader {
 
         }catch (ex : java.lang.Exception){
             ex.printStackTrace()
+
+            if(isProgress) parent.removeView(loadingBinding?.root)
+
             if (error != null) {
                 imageView.setImageDrawable(error)
-                parent.removeView(loadingBinding?.root)
+
             }
         }
 
