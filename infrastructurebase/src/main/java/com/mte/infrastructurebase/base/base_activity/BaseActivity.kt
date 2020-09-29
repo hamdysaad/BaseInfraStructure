@@ -164,7 +164,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
 
 
     //Add Fragment by fragmentManager
-    fun addFragment(fragmentManager : FragmentManager,
+    open fun addFragment(fragmentManager : FragmentManager,
                     fragment : Fragment,
                     id: Int,
                     addToBackStack: Boolean) {
@@ -178,7 +178,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
         if (addToBackStack)
             transaction.addToBackStack(fragment.javaClass.simpleName)
 
-        transaction.commitNow()
+        transaction.commit()
 
     }
 
@@ -186,7 +186,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
         replaceFragment(supportFragmentManager , fragment , id , addToBackStack)
     }
 
-    fun replaceFragment( fragmentManager : FragmentManager ,
+    open fun replaceFragment( fragmentManager : FragmentManager ,
                          fragment: Fragment,
                          id: Int,
                          addToBackStack: Boolean) {
@@ -201,7 +201,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
             transaction.addToBackStack(fragment.javaClass.canonicalName)
 
         transaction.replace(id, fragment, fragment.javaClass.canonicalName)
-        transaction.commitNow()
+        transaction.commit()
     }
 
     /**
