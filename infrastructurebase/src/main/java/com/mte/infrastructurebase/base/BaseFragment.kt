@@ -146,12 +146,12 @@ abstract class BaseFragment < D : ViewDataBinding>:Fragment() {
     /**
      * show message dialog
      */
-    fun showInfoMsgDialog(msg : String? , title : String? = null) {
+    fun showInfoMsgDialog(msg : String? , title : String? = null ,  positiveBtn: String? = null) {
         if(msg == null) return
 
         activity?.let {
             if (it is BaseActivity<*>) {
-                it.showInfoMsgDialog(msg , title)
+                it.showInfoMsgDialog(msg , title , positiveBtn)
             }
         }
     }

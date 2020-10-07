@@ -22,7 +22,9 @@ class MainActivity : BaseToolbarActivity<ActivityMainBinding>() {
     override fun initUI(savedInstanceState: Bundle?) {
 
 
-        showConfirmMessagDialog(
+        showErrorMsgDialog("asdfasdfasdf")
+
+       /* showConfirmMessagDialog(
             msg = "Confirm msg , Do you want to open error msg?"
 //            , positiveBtn =  "confirm"
 //            , negativeBtn = "No"
@@ -36,7 +38,7 @@ class MainActivity : BaseToolbarActivity<ActivityMainBinding>() {
                     positiveBtnHandler = { showSuccessMsgDialog("Success Message , to show info message" , positiveBtnHandler = {showInfoMsgDialog("info messsage")}) }
 //                    , negativeBtn = "No"
                 )
-            })
+            })*/
 
 
         /*object : NetworkBoundResource<List<String>, LoginResponse, List<ValidatonError>>() {

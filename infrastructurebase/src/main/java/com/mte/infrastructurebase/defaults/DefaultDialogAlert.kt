@@ -36,7 +36,7 @@ class DefaultDialogAlert(
     private fun showDialog(
         msg: String?,
         title: String?,
-        positiveBtn : String? = okBtnText,
+        positiveBtn : String? = null,
         negativeBtn : String? = null,
         positiveBtnHandler : (() -> Unit) ? = null,
         negativeBtnHandler : (() -> Unit) ? = null
@@ -70,8 +70,8 @@ class DefaultDialogAlert(
         messageDialog?.show()
     }
 
-    override fun showInfoMsg(msg: String, title: String?) {
-       showDialog(msg , title)
+    override fun showInfoMsg(msg: String, title: String? ,   positiveBtn: String?) {
+       showDialog(msg , title , okBtnText)
     }
 
     override fun showWarningMsg(
@@ -82,7 +82,7 @@ class DefaultDialogAlert(
         positiveBtnHandler: (() -> Unit)?,
         negativeBtnHandler: (() -> Unit)?
     ) {
-        showDialog(msg , title , positiveBtn  , negativeBtn , positiveBtnHandler  , negativeBtnHandler )
+        showDialog(msg , title , positiveBtn ?: okBtnText  , negativeBtn , positiveBtnHandler  , negativeBtnHandler )
     }
 
     override fun showErrorMsg(
@@ -93,7 +93,7 @@ class DefaultDialogAlert(
         positiveBtnHandler: (() -> Unit)?,
         negativeBtnHandler: (() -> Unit)?
     ) {
-        showDialog(msg , title , positiveBtn , negativeBtn , positiveBtnHandler  , negativeBtnHandler )
+        showDialog(msg , title , positiveBtn ?: okBtnText, negativeBtn , positiveBtnHandler  , negativeBtnHandler )
     }
 
     override fun showSuccessMsg(msg: String?, title: String?, positiveBtnHandler: (() -> Unit)? , positiveBtn: String?) {

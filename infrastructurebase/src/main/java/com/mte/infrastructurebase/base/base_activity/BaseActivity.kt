@@ -207,15 +207,15 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
     /**
      * show message dialog
      */
-    fun showInfoMsgDialog(msg : String? , title : String? = null) {
+    open fun showInfoMsgDialog(msg : String? , title : String? = null ,  positiveBtn: String? = null) {
         if(msg == null) return
-        runOnUiThread { dialogAlert?.showInfoMsg(msg , title) }
+        runOnUiThread { dialogAlert?.showInfoMsg(msg , title , positiveBtn ) }
     }
 
     /**
-     * show message dialog
+     * show message dialogpos
      */
-    fun showSuccessMsgDialog(
+    open fun showSuccessMsgDialog(
         msg : String? ,
         title : String? = null ,
         positiveBtnHandler : (() -> Unit) ? = null,
@@ -228,7 +228,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
     /**
      * show Error message dialog
      */
-    fun showErrorMsgDialog(
+    open fun showErrorMsgDialog(
         msg : String? ,
         title : String? = null ,
         positiveBtn : String? = null,
@@ -245,7 +245,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
     /**
      * show Warning message dialog
      */
-    fun showWarningMsgDialog(
+    open fun showWarningMsgDialog(
         msg : String? ,
         title : String? = null ,
         positiveBtn : String? = null,
@@ -260,7 +260,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
     /**
      * Show confirm message dialog loading
      */
-    fun showConfirmMessagDialog(
+    open fun showConfirmMessagDialog(
         msg : String? ,
         title : String? = null ,
         positiveBtnHandler : (() -> Unit) ? = null,
@@ -275,14 +275,14 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
     }
 
 
-    fun wrapingLoading(root: ViewGroup?) {
+    open fun wrapingLoading(root: ViewGroup?) {
         runOnUiThread {
             wrapLoading?.addLoadingView(root)
         }
 
     }
 
-    fun wrapinError(
+    open fun wrapinError(
         msg: String? = null,
         root: ViewGroup?,
         onRetryClick: (()->Unit)?  = null
@@ -299,7 +299,7 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
 
     }
 
-    fun wrapinEmptyData(
+    open fun wrapinEmptyData(
         msg: String? = null,
         root: ViewGroup?,
         onRetryClick: (()->Unit)?  = null
@@ -314,12 +314,12 @@ abstract class BaseActivity<T : ViewDataBinding?> : AppCompatActivity() {
     }
 
 
-    fun openDialogFragment(dialogListFragment: BaseDialog<*>) {
+    open fun openDialogFragment(dialogListFragment: BaseDialog<*>) {
         val ft = supportFragmentManager.beginTransaction()
         dialogListFragment.show(ft, "dialog")
     }
 
-    fun showToast(msg : String? , duration : Int = Toast.LENGTH_SHORT){
+    open fun showToast(msg : String? , duration : Int = Toast.LENGTH_SHORT){
         msg ?: return
         Toast.makeText(this , msg , duration).show()
     }

@@ -3,7 +3,7 @@ package com.mte.infrastructurebase.base.base_activity
 
 interface IDialogAlert {
 
-    fun showInfoMsg(msg : String , title : String? = null)
+    fun showInfoMsg(msg : String , title : String? = null ,   positiveBtn: String? = null)
 
     fun showWarningMsg(
         msg : String ,
