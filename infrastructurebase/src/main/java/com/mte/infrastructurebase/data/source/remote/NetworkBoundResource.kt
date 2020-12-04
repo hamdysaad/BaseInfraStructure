@@ -3,8 +3,13 @@ package com.mte.infrastructurebase.data.source.remote
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
+import com.mte.infrastructurebase.App
+import com.mte.infrastructurebase.R
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
+import java.lang.Exception
 
 
 abstract class NetworkBoundResource<ResultType, ResponseType, ERROR_RESSULT> constructor(private val contextProviders: ContextProviders) {
@@ -85,7 +90,14 @@ abstract class NetworkBoundResource<ResultType, ResponseType, ERROR_RESSULT> con
 
     open fun createErrorBodyResult(errorBody: String?): ERROR_RESSULT? = null
 
-    open fun getErrorBody(errorBody: String?): String? = null
+    open fun getErrorBody(errorBody: String?): String? {
+        Timber.e("createErrorBodyResult $errorBody")
+        return try {
+            Gson().fromJson(errorBody  , DefaultAppErrorBaseResponse::class.java).getError()
+        }catch (ex : Exception){
+            null
+        }
+    }
 
     protected open fun onFetchFailed() {}
 
